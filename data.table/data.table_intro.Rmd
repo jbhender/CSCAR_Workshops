@@ -1,0 +1,646 @@
+---
+title: "data.table"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+```
+
+Getting Started
+===================================== 
+Column {data-width=700}
+-----------------------------------------------------------------------
+
+### Packages and data
+```{r start, echo = TRUE}
+# Packages: -------------------------------------------------------------------
+library(tidyverse)
+library(dbplyr)
+library(Lahman)
+library(data.table)
+#lapply( c('tidyverse', 'dbplyr', 'Lahman', 'data.table'), install.packages)
+
+# Create a local SQLlite database of the Lahman data: ----------------------
+lahman = lahman_sqlite()
+
+# Copy the batting table to memory as a tibble: -------------------------------
+batting_tbl = lahman %>% 
+  tbl("BATTING") %>% 
+  collect()
+class(batting_tbl)
+
+# Convert the copy in memory to a data.table: ---------------------------------
+batting_dt = as.data.table(batting_tbl)
+class(batting_dt)
+```
+
+Column {data-width=300}
+-----------------------------------------------------------------------
+### Vignettes
+
+  + [Introduction to data.table](https://cran.r-project.org/web/packages/data.table/vignettes/datatable-intro.html)
+
+  + [Reference Semantics](https://cran.r-project.org/web/packages/data.table/vignettes/datatable-reference-semantics.html)
+
+  + [Efficient reshaping using data.tables](https://cran.r-project.org/web/packages/data.table/vignettes/datatable-reshape.html)
+  
+  + The following points from the [datatable-faq](https://cran.r-project.org/web/packages/data.table/vignettes/datatable-faq.html):
+     1.5, 1.6, 2.1, 2.3, 2.16, 2.17, 2.21, 2.23
+
+Select with `j`
+===================================== 
+Column {data-width=600}
+-----------------------------------------------------------------------
+
+### data.table
+```{r j1_dt, echo = TRUE}
+# data.table
+batting_dt[ , .(playerID, yearID, league = lgID, stint)]  
+```
+
+The `j` clause in a data.table is used to select columns. The `.()` is an
+alias for `list()` within a data.table. Each element of the list becomes a 
+column in the resulting data.table. We can provide new names for the columns
+by naming the list elements. 
+
+Column {.tabset data-width=400}
+-----------------------------------------------------------------------
+
+### SQL
+```{r j1_sql, echo = TRUE}
+#SQL: SELECT
+query = 
+'
+SELECT playerID, yearID, lgID as league, stint
+FROM BATTING
+'
+lahman %>% tbl(sql(query)) 
+```
+
+### dplyr
+```{r j1_dplyr, echo = TRUE }
+# dplyr: select, rename, transmute
+batting_tbl %>%
+    transmute(playerID, yearID, league = lgID, stint)
+
+batting_tbl %>%
+    select(playerID, yearID, league = lgID, stint)
+```
+
+Compute in `j`
+===================================== 
+Column {.tabset data-width=600}
+-----------------------------------------------------------------------
+
+### data.table
+```{r j2_dt, echo = TRUE}
+# data.table
+batting_dt[ , .(playerID, avg = H / AB)]
+```
+
+Any valid R expression can be used in "j" and we may reference the columns as
+variables. This is similar to the behavior of the R function `with()`. As the 
+long as the expression returns a *list* the result is a data.table. 
+
+Column {.tabset data-width=400}
+-----------------------------------------------------------------------
+
+### SQL
+```{r j2_sql, echo = TRUE}
+#SQL: 
+query = 
+'
+SELECT playerID, 
+       (Cast (H as Float) /  Cast (AB as Float) ) as avg
+FROM BATTING
+'
+lahman %>% tbl(sql(query)) %>% collect()
+```
+
+### dplyr
+```{r j2_dplyr, echo = TRUE }
+# dplyr: transmute
+batting_tbl %>%
+  transmute( playerID, avg = H / AB)
+```
+
+Aggregate in `j`
+===================================== 
+Column {data-width=600}
+-----------------------------------------------------------------------
+
+### data.table
+```{r j3_dt, echo = TRUE}
+# data.table: aggregate using a valid R expression
+batting_dt[, .(max_HBP = max(HBP, na.rm=TRUE))]
+```
+
+Here we find the maximum HBP entry in the table using a function that returns
+a single value. 
+
+Column {.tabset data-width=400}
+-----------------------------------------------------------------------
+
+### SQL
+```{r j3_sql, echo = TRUE}
+# SQL: SELECT with aggregation function
+query =
+'
+SELECT max(HBP) as max_hbp
+FROM BATTING
+'
+lahman %>% tbl(sql(query)) %>% collect()
+```
+
+### dplyr
+```{r j3_dplyr, echo = TRUE }
+# dplyr: summarize
+batting_tbl %>%
+  summarize( max_HBP = max(HBP, na.rm=TRUE))
+```
+
+Grouping with `by`
+===================================== 
+Column {.tabset data-width=600}
+-----------------------------------------------------------------------
+
+### data.table: `by`
+```{r j4_dt, echo = TRUE}
+# data.table
+#batting_dt[ , .(avg = sum(H) / sum(AB)), by = .(playerID, yearID, lgID)]
+batting_dt[ , .(avg = sum(H) / sum(AB)), .(playerID, yearID, lgID)]
+```
+
+We can perform grouped operations in `j` using the `by` argument. Use a list
+to form groups using the unique combinations from multiple columns. Observe that
+unlike the SQL and dplyr versions the resulting table is not re-ordered by 
+group.
+
+### data.table: `keyby`
+```{r j4_dt_keyby, echo = TRUE}
+# data.table: keyby
+# Here the parameter name is required
+batting_dt[ , .(avg = sum(H) / sum(AB)), keyby = .(playerID, yearID, lgID)]
+```
+
+If we use `keyby` the new data.table is reordered by group.
+
+Column {.tabset data-width=400}
+-----------------------------------------------------------------------
+
+### SQL
+```{r j4_sql, echo = TRUE}
+#SQL: 
+query = 
+'
+SELECT playerID, yearID, lgID,
+       ( Cast (sum(H) as Float) / Cast (sum(AB) as Float) ) as avg
+FROM BATTING
+GROUP BY playerID, yearID, lgID
+'
+lahman %>% tbl(sql(query)) %>% collect()
+```
+
+### dplyr
+```{r j4_dplyr, echo = TRUE }
+# dplyr: group_by
+batting_tbl %>% 
+  group_by(playerID, yearID, lgID) %>%
+  summarize( avg = sum(H) / sum(AB) )
+```
+
+Select rows in `i`
+===================================== 
+Column {.tabset data-width=600}
+-----------------------------------------------------------------------
+
+### data.table: logical indexing
+```{r j5_dt, echo = TRUE}
+# data.table
+batting_dt[ yearID == 2016, .(playerID, HBP)]
+```
+
+The `i` clause in a data.table is used to select rows. Similar to `dplyr::filter`
+or subsetting a data.frame we often use it with a logical index whose length matches
+the number of rows. 
+
+### data.table: keys
+```{r j5_dt_key, echo = TRUE}
+# data.table
+setkey(batting_dt, 'teamID')
+batting_dt['DET', .(playerID, teamID, HBP)]
+key(batting_dt)
+
+setkey(batting_dt, 'yearID')
+batting_dt[.(2016), .(playerID, yearID, HBP)]
+
+# Compare the difference
+batting_dt[2016, .(playerID, yearID, HBP)]
+
+# Remove key for later examples
+setkey(batting_dt, NULL)
+```
+
+If our data.table has one or more columns designated as a key, we can subset by
+value in `i`.  Note the need to pass integer-valued keys within a list to 
+differentiate from simple subsetting by integer. 
+
+When we set a key using `setkey()` the rows are reordered to enable faster
+subsetting by key. This is similar to "indexing" in SQL. Read more about keys in
+this [vignette](https://cran.r-project.org/web/packages/data.table/vignettes/datatable-keys-fast-subset.html). 
+
+Column {.tabset data-width=400}
+-----------------------------------------------------------------------
+
+### SQL
+```{r j5_sql_a, echo = TRUE}
+#SQL: WHERE
+query = 
+'
+SELECT playerID, HBP
+FROM BATTING
+WHERE yearID = 2016
+'
+lahman %>% tbl(sql(query)) %>% collect()
+```
+
+### dplyr
+```{r j5_dplyr, echo = TRUE }
+# dplyr: filter
+batting_tbl %>%
+  filter(yearID == 2016) %>%
+  select(playerID, HBP)
+```
+
+### base R
+```{r echo = TRUE}
+batting_tbl[ batting_tbl$yearID == 2016, c("playerID", "yearID", "HBP")]
+```
+
+Chaining
+===================================== 
+Column {.tabset data-width=600}
+-----------------------------------------------------------------------
+
+### data.table: pipes
+```{r, echo = TRUE}
+# data.table
+batting_dt[ yearID > 2000, .(HR = sum(HR)), .(playerID)] %>%
+  .[HR > 400]
+```
+
+Those familiar with `dplyr` will be familiar with the "pipe" operation `%>%` that
+calls the function on the right with the object on the left (usually data) as its
+first parameter.  We can take advantage of the `.` used by `margittr::%>%` to use
+pipes with data.table's `[]` function. 
+
+### data.table: chaining
+
+```{r}
+batting_dt[ yearID > 2000, .(HR = sum(HR)), .(playerID)][HR > 400]
+```
+
+You can also simply "chain" the `[]` statements together. 
+
+Column {.tabset data-width=400}
+-----------------------------------------------------------------------
+
+### SQL
+```{r chaining, echo = TRUE}
+#SQL: nested anonymous table, "HAVING"
+query = 
+'
+SELECT *
+FROM (
+ SELECT playerID, sum(HR) as HR
+ FROM BATTING
+ WHERE yearID > 2000
+ GROUP BY playerID
+) 
+WHERE HR > 400
+'
+```
+
+### dplyr
+```{r dplyr_pipe, echo = TRUE }
+# dplyr: Use %>% to chain
+batting_tbl %>% 
+  filter(yearID > 2000) %>%
+  group_by(playerID) %>%
+  summarize( HR = sum(HR) ) %>%
+  ## Here's the pipe from above
+  filter( HR > 400)
+```
+
+
+Order in `i`
+===================================== 
+Column {data-width=600}
+-----------------------------------------------------------------------
+
+### data.table
+```{r, echo = TRUE}
+# data.table
+batting_dt[ yearID > 2000, .(HR = sum(HR)), .(playerID)][HR > 400][order(-HR)]
+```
+
+Use `order()` in the `i` clause to sort a data.table. 
+
+
+#### From `help(data.table::order)`:
+
+"Also x[order(.)] is now optimised internally to use data.table's fast order. data.table always reorders in "C-locale" (see Details). To sort by session locale, use x[base::order(.)]."
+
+Column {.tabset data-width=400}
+-----------------------------------------------------------------------
+
+### SQL
+```{r sql_order, echo = TRUE}
+#SQL: 
+query = 
+'
+SELECT *
+FROM (
+ SELECT playerID, sum(HR) as HR
+ FROM BATTING
+ WHERE yearID > 2000
+ GROUP BY playerID
+) 
+WHERE HR > 400
+ORDER BY -HR
+'
+lahman %>% tbl(sql(query))  %>% collect()
+```
+
+### dplyr
+```{r dplyr_pipes, echo = TRUE }
+# dplyr: arrange
+batting_tbl %>% 
+  filter(yearID > 2000) %>%
+  group_by(playerID) %>%
+  summarize( HR = sum(HR) ) %>%
+  ## Here's the pipe from above
+  filter( HR > 400) %>%
+  arrange( desc(HR) )
+```
+
+Using `.N`
+===================================== 
+Column {.tabset data-width=600}
+-----------------------------------------------------------------------
+
+### data.table: multiple stints
+```{r, echo = TRUE}
+# data.table: stints example
+batting_dt[yearID == 2016 & AB > 99, .N, .(playerID)][N>1]
+```
+
+In SQL we often use COUNT to determine *how many* records in a group meet some
+condition. In dplyr we can use `n()` within a function to count the number of
+rows by group. In `data.table` the special symbol `.N` plays the same role. 
+
+Here we use `.N` to find how many players have more than 100 AB with two or more teams in 2016. 
+
+### data.table: 20-20
+```{r, echo = TRUE}
+# data.table: 20-20
+batting_dt[yearID > 2000 , .(SB = sum(SB), HR = sum(HR)), .(playerID, yearID)] %>%
+  .[SB > 19 & HR > 19] %>% .[ , .N, yearID]
+```
+
+Here we use `.N` to count the number of "20-20" players in each year since 2000. 
+
+Column {.tabset data-width=400}
+-----------------------------------------------------------------------
+
+### SQL: stints
+```{r sql_stints, echo = TRUE}
+#SQL: stints example
+query = 
+'
+SELECT playerID, COUNT(teamID) as N
+FROM BATTING
+WHERE yearID = 2016 AND AB > 99
+GROUP BY playerID
+HAVING N > 1
+'
+lahman %>% tbl(sql(query)) %>% collect()
+```
+
+### SQL: 20-20
+
+```{r sql_20, echo = TRUE}
+#SQL: 20-20
+query = 
+'
+SELECT yearID, COUNT(playerID) as N
+FROM (
+ SELECT playerID, yearID, sum(SB) as SB, sum(HR) as HR
+ FROM BATTING
+ WHERE yearID > 2000
+ GROUP BY playerID, yearID
+ HAVING SB > 19 AND HR > 19
+)
+GROUP BY yearID
+'
+lahman %>% tbl(sql(query)) %>% collect()
+```
+
+### dplyr: stints
+```{r dplyr_stints, echo = TRUE }
+# dplyr: n()
+batting_tbl %>% 
+  filter(AB > 99 & yearID == 2016) %>%
+  group_by(playerID, yearID) %>%
+  summarize(N=n()) %>%
+  filter(N > 1)
+```
+
+### dplyr: 20-20
+```{r dplyr_20, echo = TRUE}
+# dplyr: n()
+batting_tbl %>%
+  filter( yearID > 2000) %>%
+  group_by(yearID, playerID) %>%
+  summarize( SB = sum(SB), HR = sum(HR) ) %>%
+  filter( SB > 19 & HR > 19) %>%
+  summarize( n = n() )
+```
+
+Exercises 
+===================================== 
+Column {.tabset data-width=500}
+-----------------------------------------------------------------------
+
+### data.table: Instructions
+
+Write data.table code to match each of the SQL or dplyr queries to the right.
+
+1. Find the 2016 average for all playerID with team "DET" and at least 100 AB.
+
+2. Find the playerID from team "DET" with the highest average in 2016, with
+a minimum of 100 AB.
+
+3. Find the playerID who hit the most total HRs between 2001 and 2010.
+
+4. Find all playerIDs with at least 200 hits in 2016 (across all stints) sorted in
+descending order.
+
+5. Find the number of playerIDs with at least 200 hits in each year since 2000. 
+
+### solution-1
+```{r ex_dt1, echo = TRUE}
+# data.table
+batting_dt[ teamID == 'DET' & yearID == 2016 & AB >= 100, 
+            .(playerID, avg = H / AB)]
+```
+
+### solution-2
+```{r ex_dt2, echo = TRUE}
+# data.table
+batting_dt[ teamID == 'DET' & yearID == 2016 & AB >= 100, 
+            .(playerID, avg = H / AB)][avg==max(avg)]
+```
+
+### solution-3
+```{r ex_dt3, echo = TRUE}
+# data.table
+batting_dt[yearID %in% 2001:2010, .(HR = sum(HR)), .(playerID)] %>%
+ .[which.max(HR)]
+```
+
+### solution-4
+```{r ex_dt4, echo = TRUE}
+# data.table
+batting_dt[yearID==2016, .(H = sum(H)), .(playerID) ][ H>=200 ][ order(-H) ]
+```
+
+### solution-5
+```{r ex_dt5, echo = TRUE}
+# data.table
+batting_dt[yearID > 1999, .(H = sum(H)), .(playerID, yearID) ][ H>=200 ] %>%
+   .[ , .N, yearID] %>% .[order(-yearID)]
+```
+
+Column {.tabset data-width=500}
+-----------------------------------------------------------------------
+
+### SQL-1
+```{r ex_sql1, echo = TRUE}
+query = 
+'
+SELECT playerID, ( Cast (H as Float) / Cast (AB as Float) ) as avg
+FROM BATTING 
+WHERE teamID = "DET" AND yearID = 2016 AND AB > 99
+'
+lahman %>% tbl(sql(query)) %>% collect()
+```
+
+### SQL-2
+```{r ex_sql2, echo = TRUE}
+query = 
+'
+SELECT playerID, max( Cast (H as Float) / Cast (AB as Float) ) as avg
+FROM BATTING 
+WHERE teamID = "DET" AND yearID = 2016 AND AB > 99
+'
+lahman %>% tbl(sql(query)) %>% collect()
+```
+
+### SQL-3
+```{r ex_sql3, echo = TRUE}
+query = 
+'
+SELECT playerID, max(HR)
+FROM (
+ SELECT playerID, sum(HR) as HR
+ FROM BATTING 
+ WHERE yearID < 2011 AND yearID > 2000
+ GROUP BY playerID
+) 
+'
+lahman %>% tbl(sql(query)) %>% collect()
+```
+
+### SQL-4
+```{r ex_sql4, echo = TRUE}
+query = 
+'
+SELECT playerID, sum(H) as H
+FROM BATTING 
+WHERE yearID = 2016
+GROUP BY playerID
+HAVING H > 199
+ORDER BY -H
+'
+lahman %>% tbl(sql(query)) %>% collect()
+```
+
+### SQL-5
+```{r ex_sql5, echo = TRUE}
+query = 
+'
+SELECT yearID as year, COUNT(playerID) as N
+FROM (
+ SELECT playerID, yearID, sum(H) as H
+ FROM BATTING 
+ WHERE yearID > 1999
+ GROUP BY playerID, yearID
+ HAVING H > 199
+) 
+GROUP BY yearID
+ORDER BY -yearID
+'
+lahman %>% tbl(sql(query)) %>% collect()
+```
+
+### dplyr-1 
+```{r ex_dplyr1, echo = TRUE }
+batting_tbl %>%
+  filter(yearID == 2016 & teamID == 'DET' & AB > 100) %>%
+  transmute(playerID, avg = H / AB)
+```
+
+### dplyr-2 
+```{r ex_dplyr2, echo = TRUE }
+batting_tbl %>%
+  filter(yearID == 2016 & teamID == 'DET' & AB > 100) %>%
+  transmute(playerID, avg = H / AB) %>%
+  filter(avg == max(avg))
+```
+
+### dplyr-3 
+```{r ex_dplyr3, echo = TRUE }
+batting_tbl %>%
+  filter(yearID %in% 2001:2010) %>%
+  group_by(playerID) %>%
+  summarize(HR = sum(HR)) %>%
+  filter(HR == max(HR))
+```
+
+### dplyr-4 
+```{r ex_dplyr4, echo = TRUE }
+batting_tbl %>%
+  filter(yearID %in% 2016) %>%
+  group_by(playerID) %>%
+  summarize(H = sum(H)) %>%
+  filter(H > 199) %>%
+  arrange( desc(H) )
+```
+
+### dplyr-5 
+```{r ex_dplyr5, echo = TRUE }
+batting_tbl %>%
+  filter(yearID > 1999) %>%
+  group_by(yearID, playerID) %>%
+  summarize(H = sum(H)) %>% # still grouped by yearIDs
+  filter(H > 199) %>%       # or just summarize( n = sum(H > 199))
+  summarize( n = n() ) %>%
+  arrange( desc(yearID) )
+```
+
+
