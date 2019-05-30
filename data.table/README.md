@@ -13,3 +13,16 @@ is available as [./data.table_intro.Rmd](./data.table_intro.R).
 
 You can find an R script with executable code at [data.table_intro.R](./data.table_intro.R).
 
+Solutions to exercises can be found at [exercise_solutions.R](./exercise_solutions.R).
+
+## Additonal topics
+
+Merging data.tables [example_merge.R](./example_merge.R).
+
+Using the special symbol .SD for "subset of data" and the related parameter .SDcols for controlling columns in these subsets 
+[example_SD.R](./example_SD.R). Also provides examples of `dcast` and `melt` for reshaping between wide and long.
+
+[Benchmarks](https://h2oai.github.io/db-benchmark/) comparing speed between data.table, dplyr, and other database manipulation tools.
+
+
+
