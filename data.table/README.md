@@ -17,6 +17,8 @@ Solutions to exercises can be found at [exercise_solutions.R](./exercise_solutio
 
 ## Additonal topics
 
+Updating by reference [example_reference.R](./example_reference.R)
+
 Merging data.tables [example_merge.R](./example_merge.R).
 
 Using the special symbol .SD for "subset of data" and the related parameter .SDcols for controlling columns in these subsets 
