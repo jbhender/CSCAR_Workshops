@@ -8,7 +8,8 @@ library(tidyverse)
 library(dbplyr)
 library(Lahman)
 library(data.table)
-#lapply( c('tidyverse', 'dbplyr', 'Lahman', 'data.table'), install.packages)
+#lapply( c('tidyverse', 'RSQLite', 'dbplyr', 'Lahman', 'data.table'), 
+#         install.packages)
 
 # Create a local SQLlite database of the Lahman data: ----------------------
 lahman = lahman_sqlite()
