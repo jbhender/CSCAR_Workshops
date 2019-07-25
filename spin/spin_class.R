@@ -77,4 +77,14 @@ cat('```{r chunk_name}\n # R code goes here\n```')
 #' 1. [Knitr's best hidden gem](https://deanattali.com/2015/03/24/knitrs-best-hidden-gem-spin/)
 #' 
 #' ## Examples
-#' 1. We'll convert the default Rmarkdown template into a spin template.
+#' Examples are available at https://github.com/jbhender/CSCAR_Workshops. 
+#' Other examples created during the workshop will be added there later this afternoon. 
+#' 
+#' Here is a list of examples:
+#' 
+#' 1. We'll convert the default Rmarkdown template into a spin template: `spin-class-1.R`.
+#' 1. The appendix to a recent paper of mine: `Appendix.R`.
+#' 1. The source code for this page: `spin_class.R`
+#' 1. An R script and Rmarkdown document we'll convert into a single spin-style report: `example2`
+#' 
+
