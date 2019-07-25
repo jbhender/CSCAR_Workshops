@@ -8,5 +8,8 @@ moved here soon.
 
 Dates in paranetheses refer to the most recent presentation. 
 
-[Data Management in R with data.table](./data.table/) *(May 30, 2019)*
+[Data Management in R with data.table](./data.table/) *May 30, 2019*
+
+[Spin Class: No Sweat Reports in R](./spin/) *July 25, 2019*
+
 
