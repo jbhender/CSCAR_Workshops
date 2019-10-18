@@ -6,10 +6,13 @@ moved here soon.
 
 ## Workshops
 
-Dates in paranetheses refer to the most recent presentation. 
+Dates in italics refer to the most recent presentation. 
 
 [Data Management in R with data.table](./data.table/) *May 30, 2019*
 
+[Back to a Future: Asynchronous Computing with Futures in R](./future/)
+
 [Spin Class: No Sweat Reports in R](./spin/) *July 25, 2019*
+
 
 
