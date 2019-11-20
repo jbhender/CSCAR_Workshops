@@ -13,7 +13,17 @@ double minus_loglik_cpp(NumericVector params,
                         NumericMatrix Z,
                         NumericMatrix X,
                         NumericVector w) {
-  double out = 5594.117;
+  double out;  
+  
+  // parameters
+  const int nalpha = Z.ncol(), nbeta = X.ncol(), n = y.length();
+  const double sigma = params[nalpha + nbeta + 1]; 
+  
+  // prevent warnings for now
+  double loglik = nalpha + nbeta + n;
+  out = loglik * sigma;
+  out = 5594.117;
+  
   return out; 
 }
 
