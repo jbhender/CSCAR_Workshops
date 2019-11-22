@@ -8,6 +8,8 @@ moved here soon.
 
 Dates in italics refer to the most recent presentation. 
 
+[Rcpp: Integrating C++ into R](./rcpp/)
+
 [Data Management in R with data.table](./data.table/) *May 30, 2019*
 
 [Back to a Future: Asynchronous Computing with Futures in R](./future/) *October 18, 2019*
