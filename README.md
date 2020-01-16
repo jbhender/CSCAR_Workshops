@@ -23,7 +23,7 @@ Strings and Dates in R *October 5, 2018*
 
 ## Statistical Techniques
 
-[Dimension Reduction Techniques](jbhender.github.io/workshops/DimensionReduction.html)
+[Dimension Reduction Techniques](https://jbhender.github.io/workshops/DimensionReduction.html)
 *November 9, 2018* 
 
 
