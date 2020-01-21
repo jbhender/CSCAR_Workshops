@@ -1,12 +1,16 @@
 ## Abstract
 
-This workshop will focus on analyzing winter home temperatures in the US using data from the 
+This focus for this workshop is on analyzing winter home temperatures in the US
+using data from the 
 [Residential Energy Consumption Survey](https://www.eia.gov/consumption/residential/). 
 We’ll use the [tidyverse](tidyverse.org) throughout, 
 relying on the dplyr package for data manipulations and ggplot2 for plotting. 
-The workshop will be organized in a parallel fashion, with participants given time to build
-an analysis from scratch by adapting presented examples step by step. In the process, participants
-will become familiar with core dplyr functions, pivoting using tidyr, and a basic ggplot2 example.
+
+The workshop is organized in a parallel fashion, with participants given time
+to build an analysis from scratch by adapting presented examples step by step. 
+In the process, participants will become familiar with core dplyr functions, 
+pivoting using tidyr, and a basic ggplot2 example.
+
 This workshop is geared towards beginner to intermediate R users.
 
 ## Motivating Questions
@@ -37,7 +41,7 @@ form of repetition is an opportunity to learn an important form of
 our R code to avoid explicit loops and instead rely on functions that
 implement these loops in a lower level machine language (e.g. C/C++). 
 
-The so called "microdata" can be found at:
+The "microdata" at the household level can be found at:
 https://www.eia.gov/consumption/residential/data/2015/index.php?view=microdata.
 
 We'll use the linked csv file.  We'll also take a look at the variable
@@ -45,9 +49,13 @@ and response codebook (the XLS link).  There we'll review the following
 key variables:
 
  - DOEID 
- -
+ - REGIONC
+ - EQUIPMUSE
+ - TEMPHOME
+ - TEMPGONE
+ - TEMPNITE
  - NWEIGHT
- - 
+ - BRRWT1-BRRWT96
 
 
 ## Overview
