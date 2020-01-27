@@ -57,36 +57,60 @@ key variables:
  - NWEIGHT
  - BRRWT1-BRRWT96
 
-
 ## Overview
 
+We will use the variables above to answer the questions of interest. Here is
+an outline for how we'll approach this. 
 
-
+1. Prepare an R script by writing a header and loading needed packages.
+1. Read the data from the web and create a local copy, using a flag to 
+determine when the local copy is already available to read from. 
+1. Clean our data by formatting variables and giving them memorable names. 
+1. Prepare the replicate weights in a "long" format.
+1. Select cases (rows) to be used for the analysis.
+1. Estimate the quanity of interest using the split-apply-combine or 
+"aggregate by group" pattern.
+1. Join the weights to our original data and create replicate estimates.
+1. Join our original estimates and the replicate estimates to compute
+standard errors and form confidence intervals.
+1. Visualize the results using ggplot2.  
 
 ## Example
 
 ### Step 1 - Header and libaries
 
+Before beginning, we'll state our goals and use a header to document your work.
 1. Open the template script 
-1. Update the description, details, author, and date information.
+1. Update the title, description, author, and date information.
 1. Use `library` to add `"tidyverse"` to the search path. 
 
-### Step 2 - I/O and data prep
+### Step 2 - Read data
 
-In this step we'll read in the data, select and format variables we'll need, and
+In this step you'll read in the data, select and format needed variables,  and
 filter the rows to the set of relevant cases. 
 
-In the exercise, you'll want to first set aside the replicate weights for later use:
-  - DOEID
-  - BRRWT1-BRRWT96
+First, read in the data using the template provided in the example. Use a file
+flag to decide whether to read from the URL or use a local copy.
 
-Next, in the primary data keep the variables below:
+### Step 3 - Prep data
+
+Next, create a "core" data set with the variables below:
   - DOEID
   - NWEIGHT
   - ??  , our grouping variable
-  - ??  , response variable
+  - ??  , response variables
 
-Then, select the subset of cases 
+Also, set aside the replicate weights for later use and pivot them to a long
+format:
+  - DOEID
+  - BRRWT1-BRRWT96
 
-### Step 3 - 
+Finally, select the subset of homes that use space heating in winter. 
+
+### Step 4 - Point Estimates
+
+Steps 1-3 are the initial phase of almost every analysis. Now, you're ready to 
+begin the analytic tasks. These will tend to differ between analyses.
+
+In this analysis, the first step is to form point estimates of the
 
