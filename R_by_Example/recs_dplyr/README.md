@@ -56,6 +56,17 @@ key variables:
  - NWEIGHT
  - BRRWT1-BRRWT96
 
+## Files
+
+The files for this workshop can be found at my
+[CSCAR_Workshops](https://github.com/jbhender/CSCAR_Workshops/tree/master/R_by_Example/recs_dplyr) repository on Github.
+
+Here is a list of files:
+
+ - [RbyExample-recs_tidy-example.R](./RbyExample-recs_tidy-example.R) 
+ instructor example
+ - 
+
 ## Overview
 
 We will use the variables above to answer the questions of interest. Here is
@@ -91,6 +102,11 @@ and `RbyExample-recs_tidy-solution-b.R`, respectively.  During the workshop,
 I'd suggest you develop the solution to approach (a). I'd recommend you use
 approach (b) as an exercise after the workshop to help solidify your 
 understanding. 
+
+Below you can find instructions for the example.  Use this 
+[link](./RbyExample-recs_tidy-solution-a-hints.html) for a solution that can
+be unfolded step by step or 
+[download](RbyExample-recs_tidy-solution-a.R) the solution here. 
 
 ### Step 1 - Header and libaries
 
