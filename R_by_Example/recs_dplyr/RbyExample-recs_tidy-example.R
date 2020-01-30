@@ -23,7 +23,7 @@ local_file = './recs2015_public_v4.csv'
 # use local file if it exists, if not use url and save locally
 if ( !file.exists(local_file) ) {
   recs = read_delim(url, delim = ',')
-  write_delim(recs, path = local_file)
+  write_delim(recs, path = local_file, delim = ',')
 } else {
   recs = read_delim(local_file, delim = ',')
 }

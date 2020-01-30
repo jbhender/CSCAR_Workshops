@@ -1,14 +1,18 @@
 # R by Example: Analyzing RECS using the Tidyverse
-# Solution to participant example
+# Solution to participant example (b)
 #
 # In this script, you will use the 2015 RECS data to examine 
 # how thermostat behavior impacts the difference between day and night
 # temperatures in winter, while someone is home. 
 #
+# Specifically, this sript estimates the national average difference between
+# temperatures during the day when someone is home and at night
+# grouped by thermostat behavior, among homes that that use space heating.
+#
 # Data Source:
 # https://www.eia.gov/consumption/residential/data/2015/index.php?view=microdata
 #
-# Updated: January 20, 2020
+# Updated: January 30, 2020
 # Author: James Henderson
 
 # libraries: -------------------------------------------------------------------

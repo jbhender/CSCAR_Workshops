@@ -1,14 +1,18 @@
 # R by Example: Analyzing RECS using the Tidyverse
-# Solution to participant example
+# Solution to participant example (a)
 #
 # In this script, you will use the 2015 RECS data to examine 
 # how thermostat behavior impacts the difference between day and night
 # temperatures in winter, while someone is home. 
 #
+# Specifically, this sript estimates the national average temperatures, in homes
+# that use space heating, during the day when someone is home and at night for
+# homes grouped by thermostat behavior.
+#
 # Data Source:
 # https://www.eia.gov/consumption/residential/data/2015/index.php?view=microdata
 #
-# Updated: January 20, 2020
+# Updated: January 30, 2020
 # Author: James Henderson
 
 # libraries: -------------------------------------------------------------------
@@ -87,12 +91,6 @@ temps_by_therm =
     avg_temp_night = sum(temp_night * weight) / sum(weight)
   )
 
-diff_by_therm = 
- recs_core %>%
- mutate( delta = temp_home - temp_night ) %>%
- group_by(therm) %>%
- summarize( sum(delta * weight) / sum(weight) )
-
 ## method 2, pivot to a longer format
 temps_by_type_therm =
   recs_core %>%
@@ -104,19 +102,6 @@ temps_by_type_therm =
   ) %>%
   group_by(type, therm) %>%
   summarize( avg_temp = sum(temp * weight) / sum(weight) )
-
-diff_by_therm =
-  recs_core %>%
-  pivot_longer( 
-    cols = starts_with('temp'),
-    names_to = 'type',
-    names_prefix = 'temp_',
-    values_to = 'temp'
-  ) %>%
-  group_by(therm, id) %>%
-  summarize( delta = diff(temp), weight = weight[1] ) %>%
-  group_by(therm) %>%
-  summarize( avg_delta = sum(delta * weight) / sum(weight) )
 
 # replicate winter temperature estimates, for standard errors: -----------------
 
@@ -135,22 +120,6 @@ temps_by_type_therm_repl =
   left_join( weights_long, by = c('id') ) %>%
   group_by(type, therm, replicate) %>%
   summarize(  avg_temp_repl = sum(temp * weight) / sum(weight) )
-
-diff_by_therm_repl =
-  ### each row is a temperature type for a single home
-  recs_core %>%
-  select(id, therm, starts_with('temp_') ) %>%
-  pivot_longer( 
-    cols = starts_with('temp'),
-    names_to = 'type',
-    names_prefix = 'temp_',
-    values_to = 'temp'
-  ) %>%
-  ### join with repliacte weights, each previous row is now 96 rows
-  left_join( weights_long, by = c('id') ) %>%
-  group_by(therm, replicate, id) %>%
-  summarize( delta = diff(temp), weight = weight[1] ) %>%
-  summarize(  avg_delta_repl = sum(delta * weight) / sum(weight) )
 
 # compute standard errors and CIs: ---------------------------------------------
 ## 1. Join replicate and point estimates
@@ -174,22 +143,6 @@ avg_temp_by_type_therm =
  ) %>%
  mutate( lwr = avg_temp - qnorm(.975) * se, upr = avg_temp + qnorm(.975) * se )
 
-avg_diff_by_therm =
- left_join(
-   diff_by_therm,
-   diff_by_therm_repl,
-   by = c('therm')
- ) %>%
- group_by(therm) %>%
- summarize( 
-   avg_delta = avg_delta[1], # point estimate: unique(avg_temp), first(avg_temp) 
-   se = 2 * sqrt( mean( {avg_delta_repl - avg_delta}^2 ) ) 
- ) %>%
- mutate( 
-   lwr = avg_delta - qnorm(.975) * se, 
-   upr = avg_delta + qnorm(.975) * se 
- )
-
 # visualize the results: -------------------------------------------------------
 avg_temp_by_type_therm %>%
   mutate( `Winter Temperature` = 
@@ -209,12 +162,3 @@ avg_temp_by_type_therm %>%
     xlab('Thermostat Behavior') +
     ylab('Average Temperature, ºF') +
     scale_color_manual( values = c("darkred", "orange") )
-
-avg_diff_by_therm %>%
-  ggplot( aes(y = avg_delta, x = therm) ) + 
-    geom_point() + 
-    geom_errorbar( aes(ymin = lwr, ymax = upr), width = .1) + 
-    theme_bw() +
-    xlab('Thermostat Behavior') +
-    ylab('Avg Night Less Day Temp Difference when Home, ºF') +
-    geom_hline( yintercept = 0, lty = 'dashed', color = 'darkgrey')

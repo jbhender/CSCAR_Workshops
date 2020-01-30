@@ -1,6 +1,6 @@
 ## Abstract
 
-This focus for this workshop is on analyzing winter home temperatures in the US
+The focus for this workshop is on analyzing winter home temperatures in the US
 using data from the 
 [Residential Energy Consumption Survey](https://www.eia.gov/consumption/residential/). 
 We’ll use the [tidyverse](tidyverse.org) throughout, 
@@ -66,7 +66,7 @@ an outline for how we'll approach this.
 1. Read the data from the web and create a local copy, using a flag to 
 determine when the local copy is already available to read from. 
 1. Clean our data by formatting variables and giving them memorable names. 
-1. Prepare the replicate weights in a "long" format.
+1. Prepare the replicate weights in a "longer" format.
 1. Select cases (rows) to be used for the analysis.
 1. Estimate the quanity of interest using the split-apply-combine or 
 "aggregate by group" pattern.
@@ -75,18 +75,34 @@ determine when the local copy is already available to read from.
 standard errors and form confidence intervals.
 1. Visualize the results using ggplot2.  
 
-## Example
+I'll demonstrate each of the steps above using the script 
+`RbyExample-recs_tidy-example.R`. 
+
+## Participant Example 
+
+> How does thermostat behavior impact the difference between day and night
+temperatures in winter at home?
+
+There are two ways to approach the question above:
+  a. Estimate day and night temperatures for each group and compare visually
+  a. Estimates the difference between day and night temperatures by group.
+
+I've provided solutons to each of these as `RbyExample-recs_tidy-solution-a.R`
+and `RbyExample-recs_tidy-solution-b.R`, respectively.  During the workshop,
+I'd suggest you develop the solution to approach (a). I'd recommend you use
+approach (b) as an exercise after the workshop to help solidify your 
+understanding. 
 
 ### Step 1 - Header and libaries
 
-Before beginning, we'll state our goals and use a header to document your work.
+Before beginning, we'll state our goals and use a header to document our work.
 1. Open the template script 
 1. Update the title, description, author, and date information.
 1. Use `library` to add `"tidyverse"` to the search path. 
 
-### Step 2 - Read data
+### Step 2 - Read and format data
 
-In this step you'll read in the data, select and format needed variables,  and
+In this step we'll read in the data, select and format needed variables, and
 filter the rows to the set of relevant cases. 
 
 First, read in the data using the template provided in the example. Use a file
@@ -95,22 +111,87 @@ flag to decide whether to read from the URL or use a local copy.
 ### Step 3 - Prep data
 
 Next, create a "core" data set with the variables below:
-  - DOEID
-  - NWEIGHT
-  - ??  , our grouping variable
-  - ??  , response variables
 
-Also, set aside the replicate weights for later use and pivot them to a long
-format:
-  - DOEID
+  - DOEID (`id`)
+  - NWEIGHT (`weight`)
+  - HEATHOME (`heat_home`)
+  - EQUIPMUSE (`therm`)
+  - TEMPHOME (`temp_home`)
+  - TEMPNITE (`temp_night`)
+
+In that data set, convert negative numbers to explicit missing values (`NA`) and
+use a `factor` to provide meaningful labels for `heat_home` and `therm`. 
+
+Next, select the subset of homes that use space heating in winter. 
+
+Finally, set aside the replicate weights for later use and pivot them to a
+longer format:
+
+  - DOEID (`id`)
   - BRRWT1-BRRWT96
 
-Finally, select the subset of homes that use space heating in winter. 
 
 ### Step 4 - Point Estimates
 
 Steps 1-3 are the initial phase of almost every analysis. Now, you're ready to 
 begin the analytic tasks. These will tend to differ between analyses.
 
-In this analysis, the first step is to form point estimates of the
+In this analysis, the first step is to form point estimates of the average
+national day with someone home and night temperatures. Do that by forming
+weighted (NWEIGHT/`weight`) means of these temperatures (TEMPHOME/`temp_home`,
+TEMNITE/`temp_night`) by group (EQUIPMUSE/`therm`). 
+
+To produce the plot at the end of this analysis, we'll want the temperatures in
+a longer format -- this is a good time to achieve that using `pivot_longer()`.
+
+### Step 5 - Replicate Estimates
+
+Recall that this is survey data and not an identically distributed sample of US 
+households. As such, to estimate standard errors we will use the replicate
+weights method in which we repeatedly recomptue the estimates from step 4, each
+time replacing NWEIGHT/`weight` with one of the 96 replicate weights.  To do
+this efficiently:
+
+1. Create a dataset where each row is a home (id), temperature type, and replicate
+weight. This dataset will have 96 rows for each row of the dataset in step 4.
+To do this, join the longer format weights from step 1 with the dataset from
+step 4.
+
+1. Next, re-compute point estimates for each set of replicate weights.  To do
+this, re-use the code from step 4 and add the identifier for the replicate weights
+to the `group_by` statement.
+
+The result should have rows giving the weighted average temperature for each 
+unique combination of thermostat behavior, temperature type, and set 
+of replicate weights. 
+
+### Step 6 - Standard Errors and confidence bounds
+
+Once we have the replicate estimates for our quantities of interest, we estimate
+the variance of the point estimates from step 4 using the sum of squared 
+deviations of the replicate estimates around the original point estimates, 
+scaling up by a factor determined in the process of formulating the replicate 
+weights. The standard error is the square root of this variance estimate.
+
+To accomplish this:
+
+  1. Join the point estimates from step 4 with the replicate
+estimates from step 5.
+  1. Estimate the standard error for each point estimate, using the same grouping
+structure as used in step 4 to form the point estimates.
+  1. Add columns `lwr` and `upr` for, respectively, the lower and upper 95% 
+confidence bounds using the point estimate +/- $\Phi^{-1}(.975)$ (or 1.96) 
+times the standard error.
+
+### Step 7 - Plot the results
+
+Create a plot of the results using ggplot2 and following the template from
+the example.
+
+
+
+
+
+
+
 
