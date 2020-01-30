@@ -11,6 +11,12 @@ Dates in italics refer to the most recent presentation.
 
 ## R
 
+### R by Example (Series)
+
+[Analyzing RECS using Tidyverse](./R_by_Example/recs_dplyr/) *January 30, 2020*
+
+### Other R Topics
+
 [Rcpp: Integrating C++ into R](./rcpp/) *November 22, 2019*
 
 [Data Management in R with data.table](./data.table/) *Sep 20, 2019*
