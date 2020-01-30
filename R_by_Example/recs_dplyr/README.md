@@ -1,3 +1,5 @@
+# R By Example: Analying RECS using Tidyverse
+
 ## Abstract
 
 The focus for this workshop is on analyzing winter home temperatures in the US
@@ -63,9 +65,18 @@ The files for this workshop can be found at my
 
 Here is a list of files:
 
- - [RbyExample-recs_tidy-example.R](./RbyExample-recs_tidy-example.R) 
+ - [RbyExample-recs_tidy-example.R](./RbyExample-recs_tidy-example.R) - 
  instructor example
- - 
+ - [RbyExample-recs_tidy-template.R](./RbyExample-recs_tidy-template.R) - a 
+ template R script to help you get started on the exercise.
+ - [RbyExample-recs_tidy-solution-a.R](./RbyExample-recs_tidy-solution-a.R) -
+ solution to participant exercise
+ - [RbyExample-recs_tidy-solution-a-hints.html](./RbyExample-recs_tidy-solution-a-hints.html) - exercise instructions with buttons to reveal the solution step by step
+ - [RbyExample-recs_tidy-solution-a-hints.R](./RbyExample-recs_tidy-solution-a-hints.R) - source code for the "hints" document above, written using spin. 
+ - [RbyExample-recs_tidy-solution-b.R](./RbyExample-recs_tidy-solution-b.R) - 
+ solution to the second approach, suggested as a take-home exercise. 
+ - [RbyExample-recs_tidy-solution.R](./RbyExample-recs_tidy-solution.R) - 
+ participant solution combining approaches (a) and (b) discussed below.
 
 ## Overview
 
