@@ -1,4 +1,4 @@
-# R By Example: Analying RECS using Tidyverse
+# R By Example: Analyzing RECS using Tidyverse
 
 ## Abstract
 
