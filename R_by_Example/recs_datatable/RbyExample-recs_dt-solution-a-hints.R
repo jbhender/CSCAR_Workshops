@@ -1,5 +1,5 @@
 #'---
-#' title: "R by Example: Analyzing RECS using Tidyverse (Solution a)"
+#' title: "R by Example: Analyzing RECS using data.table (Solution a)"
 #' author: James Henderson, CSCAR
 #' date: "`r format.Date( Sys.Date(), '%B %d, %Y')`"
 #' output:
@@ -13,13 +13,13 @@
 #' ## Step 1 - Header and libraries
 #' Before beginning, state your goals and use a header to document our work.
 #' 
-#'  1. Open the template script 
+#'  1. Open the template script. 
 #'  1. Update the title, description, author, and date information.
-#'  1. Use `library` to add `"tidyverse"` to the search path. 
+#'  1. Use `library` to add `"tidyverse"` and `"data.table"` to the search path. 
 
 #' Here is an example header. 
 #+ r_header
-# R by Example: Analyzing RECS using the Tidyverse
+# R by Example: Analyzing RECS using data.table
 # Solution to participant example (a)
 #
 # In this script, you will use the 2015 RECS data to examine 
@@ -33,14 +33,14 @@
 # Data Source:
 # https://www.eia.gov/consumption/residential/data/2015/index.php?view=microdata
 #
-# Updated: January 30, 2020
+# Updated: February 5, 2020
 # Author: James Henderson
 # 80: --------------------------------------------------------------------------
 
 #' Always load libraries at the top of your script.
 #+ libraries, message = FALSE, warning = FALSE
 # libraries: -------------------------------------------------------------------
-library(tidyverse)
+library(tidyverse); library(data.table)
 
 #' ## Step 2 - Read data
 #' ### Read data
@@ -58,21 +58,26 @@ local_file = './recs2015_public_v4.csv'
 
 # use local file if it exists, if not use url and save locally
 if ( !file.exists(local_file) ) {
-  recs = read_delim(url, delim = ',')
-  write_delim(recs, path = local_file, delim = ',')
+  recs = fread(url)
+  fwrite(recs, file = local_file)
 } else {
-  recs = read_delim(local_file, delim = ',')
+  recs = fread(local_file)
 }
 
 #' ## Step 3 - Prepare Data
 #' ### Select and format variables
-#' Next, format the data for analysis (as `recs_core`) by selecting key variables and giving
-#' them names that are easy for you to remember and type. My convention is to
-#' always use `snake_case` and lower case. Below are what the first few rows of 
+#' Next, format the data for analysis (as `recs_core`) by selecting
+#' key variables and giving them names that are easy for you to remember and
+#' type, while also being clear to another reader. My convention is to
+#' always use lower `snake_case`. Below are what the first few rows of 
 #' the solution look like. 
 #' 
-#' For this section you'll want to use `transmute()` or `selct()` followed
-#' by `mutate()`. To add labels, use `factor()`. 
+#' For this section you'll want to recall `dt[i, j, by]`, where:
+#'   a. `j` is a list (use `.()`) where you select or create column variables
+#'   b. `by` is a list or character vector for grouped operations
+#'   c. `i` is a logical vector used to select cases.
+#'   
+#' To add labels to variables selected in `j` use `factor()`. 
 #' 
 #' Here are the core variables we'll need:
 #' 
@@ -85,32 +90,33 @@ if ( !file.exists(local_file) ) {
 
 #+ data_prep
 # clean up key variables used in this problem: ---------------------------------
-#
+neg_to_na = function(x) {
+  ifelse( x < 0, NA, x)
+}
+
 recs_core = 
-  recs %>% 
-  transmute( 
-    # id variables
-    id = DOEID,
-    weight = NWEIGHT,
-    # grouping factor
-    therm = factor(EQUIPMUSE, levels = c(1:5, 9), 
-             labels = c('Set one temp', 
+  recs[, 
+   .(
+     # id variables
+     id = DOEID,
+     weight = NWEIGHT,
+     # grouping factor
+     therm = factor(EQUIPMUSE, levels = c(1:5, 9), 
+              labels = c(
+                        'Set one temp', 
                         'Manually adjust',
                         'Program thermostat',
                         'Turn equipment on/off',
                         'No control',
                         'Other'
                         )
-            ),
-    # case selection
-    heat_home = factor(HEATHOME, 0:1, c('No', 'Yes') ),
-    # temp variables
-    temp_home = TEMPHOME, 
-    temp_night = TEMPNITE
-  ) %>%
-  # Convert negative numbers to missing, for temps. 
-  mutate_if(is.numeric, function(x) ifelse(x < 0, NA, x))
-
+              ),
+     # case selection
+     heat_home = factor(HEATHOME, 0:1, c('No', 'Yes') ),
+     # temp variables
+     temp_home = neg_to_na(TEMPHOME), 
+     temp_night = neg_to_na(TEMPNITE)
+    ) ] 
 recs_core
 
 #' ### Filter cases
@@ -118,69 +124,51 @@ recs_core
 
 #+ filter
 # filter cases to those that use space heating in winter: ----------------------
-
-## shows why we want to do this, temps are missing if space heating not used
-#recs_core %>% 
-#  filter(heat_home == 'No') %>%
-#  summarize_all( .funs = function(x) sum(is.na(x)) )
-recs_core = filter(recs_core, heat_home == 'Yes')
+recs_core = recs_core[heat_home == 'Yes']
 
 #' ### Replicate Weights
 #' Finally, set aside the replicate weights for later use and pivot them to
-#'  a longer format using `pivot_longer()`:
+#'  a longer format using `data.table::melt()`:
 #'  
 #'   - DOEID (`id`)
 #'   - BRRWT1-BRRWT96
 
 #+ replicate_weights
 # replicate weights, for computing standard errors: ----------------------------
-## pivoted to a longer format to facilite dplyr "vectorization"
+## pivoted to a longer format to facilitate dplyr "vectorization"
 weights_long = 
-  recs %>% 
-  select( id = DOEID, BRRWT1:BRRWT96 ) %>%
-  pivot_longer( 
-    cols = BRRWT1:BRRWT96, 
-    names_to = 'replicate', 
-    values_to = 'weight'
-  )
+  recs[, c('DOEID', grep('^BRRWT', names(recs), value = TRUE)),  with = FALSE
+  ] %>%
+  melt( data = ., id.vars = 'DOEID', patterns('^BRRWT'),
+        variable.name = 'replicate', value.name = 'weight') 
+
+setnames(weights_long, c('id', 'replicate', 'weight'))
 
 weights_long
 
 #' ## Step 3 - Point Estimates
 #' In this analysis, the first step is to form point estimates of the average
-#' national day with someone home and night temperatures. Do that by forming
-#' weighted (NWEIGHT/`weight`) means of these temperatures (TEMPHOME/`temp_home`,
+#' national "day with someone home" and "night" temperatures. Do that by forming
+#' weighted (NWEIGHT/`weight`) means of temperatures (TEMPHOME/`temp_home`,
 #' TEMNITE/`temp_night`) by group (EQUIPMUSE/`therm`). 
 #' 
 #' To produce the plot at the end of this analysis, we'll want the temperatures
 #' in a longer format -- this is a good time to achieve that using
-#'  `pivot_longer()`.
+#'  `data.table::melt()`.
 
 #+ point_estimates
 
 # point estimates for winter temperatures by thermostat behavior: --------------
 
-## method 1, manually type out each temperature type
-temps_by_therm = 
-  recs_core %>% 
-  group_by(therm) %>%
-  summarize( 
-    avg_temp_home = sum(temp_home * weight) / sum(weight),
-    avg_temp_night = sum(temp_night * weight) / sum(weight)
-  )
-
-## method 2, pivot to a longer format
+## pivot to a longer format and then form weighted sums by group
 temps_by_type_therm =
-  recs_core %>%
-  pivot_longer( 
-    cols = starts_with('temp'),
-    names_to = 'type',
-    names_prefix = 'temp_',
-    values_to = 'temp'
-  ) %>%
-  group_by(type, therm) %>%
-  summarize( avg_temp = sum(temp * weight) / sum(weight) )
-
+  melt( recs_core, 
+        id.vars = c('id', 'therm', 'weight'),
+        measure.vars = patterns('^temp_'),
+        variable.name = 'type',
+        value.name = 'temp'
+  ) %>% 
+  .[ , .(avg_temp = sum(temp * weight) / sum(weight)) , .(type, therm)]
 temps_by_type_therm
 
 #' ### Step 5 - Replicate Estimates
@@ -197,7 +185,7 @@ temps_by_type_therm
 #'    weights from step 1 with the dataset from step 4.
 #'  1. Next, re-compute point estimates for each set of replicate weights. To do
 #'  this, re-use the code from step 4 and add the identifier for the replicate
-#'  weights to the `group_by` statement.
+#'  weights to the `by` argument.
 #' 
 #' The result should have rows giving the weighted average temperature for each 
 #' unique combination of thermostat behavior, temperature type, and set 
@@ -209,18 +197,16 @@ temps_by_type_therm
 ## 6 therm values, 2 types, 96 replicate weights = 1152 rows
 temps_by_type_therm_repl =
   ### each row is a temperature type for a single home
-  recs_core %>%
-  select(id, therm, starts_with('temp_') ) %>%
-  pivot_longer( 
-    cols = starts_with('temp'),
-    names_to = 'type',
-    names_prefix = 'temp_',
-    values_to = 'temp'
+  melt( recs_core, 
+        id.vars = c('id', 'therm'),
+        measure.vars = patterns('^temp_'),
+        variable.name = 'type',
+        value.name = 'temp'
   ) %>%
-  ### join with repliacte weights, each previous row is now 96 rows
-  left_join( weights_long, by = c('id') ) %>%
-  group_by(type, therm, replicate) %>%
-  summarize(  avg_temp_repl = sum(temp * weight) / sum(weight) )
+  ### join with replicate weights, each previous row is now 96 rows
+  merge(weights_long, ., by = c('id'), all = FALSE, allow.cartesian = TRUE) %>%
+  .[, .(avg_temp_repl = sum(temp * weight) / sum(weight)),
+      .(type, therm, replicate)]
 temps_by_type_therm_repl
 
 #' ## Step 6 - Standard Errors and confidence bounds
@@ -234,12 +220,12 @@ temps_by_type_therm_repl
 #' To accomplish this:
 #' 
 #'  1. Join the point estimates from step 4 with the replicate estimates
-#'    from step 5.
+#'    from step 5 using `merge()`.
 #'  1. Estimate the standard error for each point estimate, using the same
 #'   grouping structure as used in step 4 to form the point estimates.
 #'  1. Add columns `lwr` and `upr` for, respectively, the lower and upper 95% 
 #'  confidence bounds using the point estimate +/- $\Phi^{-1}(.975)$ (or 1.96) 
-#'  times the standard error.
+#'  times the standard error. This is best done using reference semantics `:=`.
 
 #+ std_errors
 # compute standard errors and CIs: ---------------------------------------------
@@ -251,44 +237,54 @@ temps_by_type_therm_repl
 ## the standard error is the square root of the variance estimate
 ## https://www.eia.gov/consumption/residential/data/2015/pdf/microdata_v3.pdf
 
+## compute standard errors and retain point estimate
 avg_temp_by_type_therm =
- left_join(
+ merge(
    temps_by_type_therm_repl, 
    temps_by_type_therm, 
    by = c('therm', 'type')
  ) %>%
- group_by(type, therm) %>%
- summarize( 
-   avg_temp = avg_temp[1], # point estimate: unique(avg_temp), first(avg_temp) 
-   se = 2 * sqrt( mean( {avg_temp_repl - avg_temp}^2 ) ) 
- ) %>%
- mutate( lwr = avg_temp - qnorm(.975) * se, upr = avg_temp + qnorm(.975) * se )
+ .[, .( avg_temp = avg_temp[1],
+        se = 2 * sqrt( mean( {avg_temp_repl - avg_temp}^2 ) ) 
+      ), 
+   .(type, therm)]
+
+## add confidence bounds using reference semantics
+avg_temp_by_type_therm[,
+    `:=`( lwr = avg_temp - qnorm(.975) * se, 
+          upr = avg_temp + qnorm(.975) * se ) ]
 
 #' ## Step 7 - Plot the results
 #' Create a plot of the results using ggplot2 and following the template from
 #' the example.
+#' 
+#' To get nice labels for temperature `type` use reference semantics (`:=`) to
+#' create a new factor variable `Winter Temperature`
 #'
 
 #+ visualize
 # visualize the results: -------------------------------------------------------
-avg_temp_by_type_therm %>%
-  mutate( `Winter Temperature` = 
+## New factor for nice labels
+avg_temp_by_type_therm[, 
+  `Winter Temperature` := 
             factor(type, 
-                   levels = c('home', 'night'),
-                   labels = c('when someone is home during the day',
+                   levels = c('temp_gone', 'temp_home', 'temp_night'),
+                   labels = c('when no one is home during day',
+                              'when someone is home during the day',
                               'at night'
                             )
             )
-  ) %>%
+]
+
+avg_temp_by_type_therm %>%
   ggplot( aes(y = avg_temp, x = therm, color = `Winter Temperature`) ) +
     geom_point( position = position_dodge(width = 0.2)) +
     geom_errorbar( aes(ymin = lwr, ymax = upr), 
                    width = .1, position = position_dodge(width = 0.2)
     ) +
     theme_bw() +
-    # w/o coord_flip below, may want to rotate labels
-    #theme( axis.text.x = element_text(angle = 90) ) + 
     xlab('Thermostat Behavior') +
     ylab('Average Temperature, ºF') +
     scale_color_manual( values = c("darkred", "orange") ) +
-    coord_flip() 
+    coord_flip()
+
