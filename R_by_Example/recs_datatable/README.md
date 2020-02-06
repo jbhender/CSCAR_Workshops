@@ -74,8 +74,6 @@ Here is a list of files:
  - [RbyExample-recs_dt-solution-a-hints.R](./RbyExample-recs_dt-solution-a-hints.R) - source code for the "hints" document above, written using spin. 
  - [RbyExample-recs_dt-solution-b.R](./RbyExample-recs_dt-solution-b.R) - 
  solution to the second approach, suggested as a take-home exercise. 
- - [RbyExample-recs_dt-solution.R](./RbyExample-recs_dt-solution.R) - 
- participant solution combining approaches (a) and (b) discussed below.
 
 ## Overview
 
