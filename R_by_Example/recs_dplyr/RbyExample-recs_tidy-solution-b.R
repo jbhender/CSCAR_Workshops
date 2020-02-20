@@ -82,78 +82,22 @@ recs_core = filter(recs_core, heat_home == 'Yes')
 
 # point estimates for winter temperatures by thermostat behavior: --------------
 
-## method 1, manually type out each temperature type
-temps_by_therm = 
-  recs_core %>% 
-  group_by(therm) %>%
-  summarize( 
-    avg_temp_home = sum(temp_home * weight) / sum(weight),
-    avg_temp_night = sum(temp_night * weight) / sum(weight)
-  )
-
 diff_by_therm = 
  recs_core %>%
  mutate( delta = temp_home - temp_night ) %>%
  group_by(therm) %>%
- summarize( sum(delta * weight) / sum(weight) )
-
-## method 2, pivot to a longer format
-temps_by_type_therm =
-  recs_core %>%
-  pivot_longer( 
-    cols = starts_with('temp'),
-    names_to = 'type',
-    names_prefix = 'temp_',
-    values_to = 'temp'
-  ) %>%
-  group_by(type, therm) %>%
-  summarize( avg_temp = sum(temp * weight) / sum(weight) )
-
-diff_by_therm =
-  recs_core %>%
-  pivot_longer( 
-    cols = starts_with('temp'),
-    names_to = 'type',
-    names_prefix = 'temp_',
-    values_to = 'temp'
-  ) %>%
-  group_by(therm, id) %>%
-  summarize( delta = diff(temp), weight = weight[1] ) %>%
-  group_by(therm) %>%
-  summarize( avg_delta = sum(delta * weight) / sum(weight) )
+ summarize( avg_delta = sum(delta * weight) / sum(weight) )
 
 # replicate winter temperature estimates, for standard errors: -----------------
 
 ## 6 therm values, 2 types, 96 replicate weights = 1152 rows
-temps_by_type_therm_repl =
-  ### each row is a temperature type for a single home
-  recs_core %>%
-  select(id, therm, starts_with('temp_') ) %>%
-  pivot_longer( 
-    cols = starts_with('temp'),
-    names_to = 'type',
-    names_prefix = 'temp_',
-    values_to = 'temp'
-  ) %>%
-  ### join with repliacte weights, each previous row is now 96 rows
-  left_join( weights_long, by = c('id') ) %>%
-  group_by(type, therm, replicate) %>%
-  summarize(  avg_temp_repl = sum(temp * weight) / sum(weight) )
-
 diff_by_therm_repl =
   ### each row is a temperature type for a single home
   recs_core %>%
-  select(id, therm, starts_with('temp_') ) %>%
-  pivot_longer( 
-    cols = starts_with('temp'),
-    names_to = 'type',
-    names_prefix = 'temp_',
-    values_to = 'temp'
-  ) %>%
+  transmute(id, therm, delta = temp_home - temp_night ) %>%
   ### join with repliacte weights, each previous row is now 96 rows
   left_join( weights_long, by = c('id') ) %>%
-  group_by(therm, replicate, id) %>%
-  summarize( delta = diff(temp), weight = weight[1] ) %>%
+  group_by(therm, replicate) %>%
   summarize(  avg_delta_repl = sum(delta * weight) / sum(weight) )
 
 # compute standard errors and CIs: ---------------------------------------------
@@ -164,19 +108,6 @@ diff_by_therm_repl =
 ## Refer to the link below for std error computations, see page 3
 ## the standard error is the square root of the variance estimate
 ## https://www.eia.gov/consumption/residential/data/2015/pdf/microdata_v3.pdf
-
-avg_temp_by_type_therm =
- left_join(
-   temps_by_type_therm_repl, 
-   temps_by_type_therm, 
-   by = c('therm', 'type')
- ) %>%
- group_by(type, therm) %>%
- summarize( 
-   avg_temp = avg_temp[1], # point estimate: unique(avg_temp), first(avg_temp) 
-   se = 2 * sqrt( mean( {avg_temp_repl - avg_temp}^2 ) ) 
- ) %>%
- mutate( lwr = avg_temp - qnorm(.975) * se, upr = avg_temp + qnorm(.975) * se )
 
 avg_diff_by_therm =
  left_join(
@@ -195,25 +126,6 @@ avg_diff_by_therm =
  )
 
 # visualize the results: -------------------------------------------------------
-avg_temp_by_type_therm %>%
-  mutate( `Winter Temperature` = 
-            factor(type, 
-                   levels = c('home', 'night'),
-                   labels = c('when someone is home during the day',
-                              'at night'
-                            )
-            )
-  ) %>%
-  ggplot( aes(y = avg_temp, x = therm, color = `Winter Temperature`) ) +
-    geom_point( position = position_dodge(width = 0.2)) +
-    geom_errorbar( aes(ymin = lwr, ymax = upr), 
-                   width = .1, position = position_dodge(width = 0.2)
-    ) +
-    theme_bw() +
-    xlab('Thermostat Behavior') +
-    ylab('Average Temperature, ºF') +
-    scale_color_manual( values = c("darkred", "orange") )
-
 avg_diff_by_therm %>%
   ggplot( aes(y = avg_delta, x = therm) ) + 
     geom_point() + 
