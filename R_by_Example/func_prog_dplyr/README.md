@@ -99,7 +99,7 @@ replicate weight pattern in the function `recs_mean_brr` which can be found in
 
 1. Use base R where needed, keeping in mind that tibbles/data.frames are lists.
 
-1. Use ` !!new_var := ...` to name a new variable using a length one character
+1. Use `!!new_var :=` to name a new variable using a length one character
 vector `new_var`.
 
 1. Use "quosures" and quasi-quotations as a last resort, see `vignette('programming', package = 'dplyr')`. Personally, I avoid this outside the use of `.data[!!var]`.
