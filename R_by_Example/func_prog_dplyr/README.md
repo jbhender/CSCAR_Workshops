@@ -84,7 +84,7 @@ weighted sums by group and fix ideas. The final product can be viewed [here](./R
 
 This is an extension of example 2, but now encapsulates the 
 replicate weight pattern in the function `recs_mean_brr` which can be found in
-[RbyExample-recs_funcs.R](./RbyExample-fpd-recs_funcs.R)
+[RbyExample-fpd-recs_funcs.R](./RbyExample-fpd-recs_funcs.R)
 
 ## Tips for writing functions using dplyr
 
