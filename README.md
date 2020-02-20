@@ -13,6 +13,8 @@ Dates in italics refer to the most recent presentation.
 
 ### R by Example (Series)
 
+[Functional Programming using dplyr](./R_by_Example/func_prog_dplyr/) *February 20, 2020*
+
 [Analyzing RECS using data.table](./R_by_Example/recs_datatable/) *February 6, 2020*
 
 [Analyzing RECS using Tidyverse](./R_by_Example/recs_dplyr/) *January 30, 2020*
