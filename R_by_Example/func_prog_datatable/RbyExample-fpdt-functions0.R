@@ -1,14 +1,13 @@
 # R by Example: Functional Programming using data.table
-# Function 0
+# Functions recs_mean0 - recs_mean_5
 #
 # In this script, we encapsulate the core data.table code from the example
-# in a function allowing only the data set to change.  
-#
+# in a series of increasingly flexible functions.#
 #
 # Data Source:
 # https://www.eia.gov/consumption/residential/data/2015/index.php?view=microdata
 #
-# Updated: March 5, 2020
+# Updated: March 6, 2020
 # Author: James Henderson
 
 #setwd('~/github/CSCAR_Workshops/R_by_Example/func_prog_datatable/')
