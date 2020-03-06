@@ -8,7 +8,7 @@
 # Data Source:
 # https://www.eia.gov/consumption/residential/data/2015/index.php?view=microdata
 #
-# Updated: February 24, 2020
+# Updated: March 5, 2020
 # Author: James Henderson
 
 #setwd('~/github/CSCAR_Workshops/R_by_Example/func_prog_datatable/')
@@ -74,11 +74,11 @@ recs_mean0 = function(dt) {
   # inputs: dt - a data.table with columns temp, weight, type, and region
   #
   # output: a data.table with one row per type/region
-  
+
   # key computation
   dt[, .(avg_temp = sum(temp * weight) / sum(weight)), .(type, region)]
 }
-#recs_mean0(recs_long)
+if ( debug == TRUE ) recs_mean0(recs_long)
 
 ## add some error checking to recs_mean0
 recs_mean1 = function(dt) {
@@ -96,7 +96,7 @@ recs_mean1 = function(dt) {
   # key computation
   dt[, .(avg_temp = sum(temp * weight) / sum(weight)) , .(type, region)]
 }
-#recs_mean1(recs_long)
+if ( debug == TRUE ) recs_mean1(recs_long)
 
 ## make grouping variable programmable
 recs_mean2 = function(dt, by = NULL ) {
@@ -104,7 +104,7 @@ recs_mean2 = function(dt, by = NULL ) {
   # grouped by "type" and "region"
   #
   # inputs: dt - a data.table with columns temp, weight, type, and region
-  #
+  #         by - a character vector of column names in dt to group by
   # output: a data.table with one row per type/region
   
   ## error checking
@@ -117,7 +117,7 @@ recs_mean2 = function(dt, by = NULL ) {
   # key computation
   dt[, .(avg_temp = sum(temp * weight) / sum(weight)) , by = by]
 }
-recs_mean2(recs_long, by = c('type', 'region'))
+if ( debug == TRUE )  recs_mean2(recs_long, by = c('type', 'region'))
 
 ## make target variable and weight variable programmable
 recs_mean3 = function(dt, target, weight = 'weight', by = NULL) {
@@ -125,11 +125,16 @@ recs_mean3 = function(dt, target, weight = 'weight', by = NULL) {
   # grouped by "type" and "region"
   #
   # inputs: dt - a data.table with columns temp, weight, type, and region
-  #
+  #         target - the column whose (weighted) mean is desired as a 
+  #                  length 1 character vector
+  #         weight - a length 1 character vector identifying the column
+  #                  of weights
+  #         by - a character vector of column names in dt to group by
   # output: a data.table with one row per type/region
   
   ## error checking
   stopifnot( is.data.table(dt) )
+  stopifnot( length(target) == 1 & length(weight) == 1)
   stopifnot( target %in% names(dt) )
   stopifnot( weight %in% names(dt) )
   stopifnot( all( by %in% names(dt) ) ) 
@@ -139,23 +144,32 @@ recs_mean3 = function(dt, target, weight = 'weight', by = NULL) {
      .(avg = sum(.SD[[..target]] * .SD[[..weight]]) / sum(.SD[[..weight]])),
      by = by]
 }
-recs_mean3(recs_long, target = 'temp', weight = 'weight', 
+if ( debug == TRUE ) {
+  recs_mean3(recs_long, target = 'temp', weight = 'weight', 
            by = c('type', 'region'))
-#recs_mean3(recs, target = 'TEMPHOME', weight = 'NWEIGHT', by = 'EQUIPMUSE')
+  recs_mean3(recs, target = 'TEMPHOME', weight = 'NWEIGHT', by = 'EQUIPMUSE')
+}
 
 ## make name of new variable programmable
 recs_mean4 = function(dt, target, weight = 'weight', by = NULL, new_var = NULL) {
-  # computes the weighted mean of "temp" using weights given in "weight" and
-  # grouped by "type" and "region"
+  # computes the weighted mean of `target` using weights given in `weight` and
+  # grouped by `by`
   #
-  # inputs: dt - a data.table with columns temp, weight, type, and region
-  #
+  # inputs: dt - a data.table
+  #         target - the column whose (weighted) mean is desired as a 
+  #                  length 1 character vector
+  #         weight - a length 1 character vector identifying the column
+  #                  of weights
+  #         by - a character vector of column names in dt to group by
+  #         new_var - when NULL (the default) the new variable will be
+  #                   named "avg". If not NULL, should be a length 1
+  #                   character vector.
   # output: a data.table with one row per type/region
   
   ## error checking
   stopifnot( is.data.table(dt) )
-  
-  stopifnot( is.null(new_var) | {length(new_var) == length(var)} )
+  stopifnot( is.null(new_var) | {length(new_var) == length(target)} )
+  stopifnot( length(target) == 1 & length(weight) == 1)
   stopifnot( target %in% names(dt) )
   stopifnot( weight %in% names(dt) )
   stopifnot( all( by %in% names(dt) ) ) 
@@ -174,128 +188,65 @@ recs_mean4 = function(dt, target, weight = 'weight', by = NULL, new_var = NULL) 
   }
   out
 }
-recs_mean4(recs_long, 
+if ( debug == TRUE ) {
+ recs_mean4(recs_long, 
            target = 'temp', 
-           by = c('type', 'region')#,
-#           new_var = 'avg_temp'
+           by = c('type', 'region'),
+           new_var = 'avg_temp'
           )
-recs_mean4(recs, 
+  
+ recs_mean4(recs, 
            target = 'TEMPHOME', 
            weight = 'NWEIGHT', 
            by = 'EQUIPMUSE',
            new_var = 'temp_home')
+}
 
 ## Allow for multiple targets
 recs_mean5 = function(dt, target, weight = 'weight', by = NULL, new_var = NULL) {
-  # computes the weighted mean of "temp" using weights given in "weight" and
-  # grouped by "type" and "region"
+  # computes the weighted mean of each `target` variable grouped using `by`
   #
-  # inputs: dt - a data.table with columns temp, weight, type, and region
-  #
-  # output: a data.table with one row per type/region
+  # inputs: dt - a data.table
+  #         target - a character vector identifying the columns whose (weighted)
+  #                  means are to be computed 
+  #         weight - a length 1 character vector identifying the column
+  #                  of weights
+  #         by - a character vector of column names in dt to group by
+  #         new_var - when NULL (the default) the weighted means will retain
+  #                   the names of the original variables. If not, must
+  #                   be the same length as `target`
+  # output: a data.table with one row per type/region and columns for the
+  #         weighted mean of each target variable as well group identifiers.
   
   ## error checking
   stopifnot( is.data.table(dt) )
-  
-  stopifnot( is.null(new_var) | {length(new_var) == length(var)} )
-  stopifnot( target %in% names(dt) )
+  stopifnot( is.null(new_var) | {length(new_var) == length(target)} )
+  stopifnot( all(target %in% names(dt)) )
   stopifnot( weight %in% names(dt) )
   stopifnot( all( by %in% names(dt) ) ) 
   
   # key computation
-  if ( length(target) == 1 ) {
-    out = dt[, .(avg =
-                   sum(.SD[[..target]] * .SD[[..weight]]) / sum(.SD[[..weight]])
-                 ),
-             by = by
-          ]
-    
-    if ( !is.null(new_var) ) {
-      setnames(out, c(by, new_var) )
-    } else {
-          setnames(out, c(by, target) )
-    }
-  } else {
-    out = dt[, .(avg = sum(.SD[[..target[1]]] * .SD[[..weight]] ) / 
-                           sum(.SD[[..weight]])
-                ),
-             by = by
-          ]
-    
-  }
-    for ( tt in target ) {
-      out_list    
-    }
-    
-  }
+  cols = c(target, weight)
+  out = dt[, lapply(1:{ncol(.SD)-1}, function(i) {
+                sum(.SD[[i]]*.SD[[..weight]]) / sum(.SD[[..weight]])}),
+           by = by,
+           .SDcols = cols]
   
   # adjust names as needed
-  if ( FALSE * !is.null(new_var) ) {
-    setnames(out, c(by, new_var) )
+  if ( is.null(new_var) ) {
+    new_names = c(by, target)
   } else {
-#    setnames(out, c(by, target) )
+    new_names = c(by, new_var)
   }
+  setnames(out, new_names)
   out
 }
-# compute standard errors and CIs: ---------------------------------------------
-## 1. Join replicate and point estimates
-## 2. Compute std error using scaled RMSE of replicates around point estimates
-## 3. Form confidence intervals using stand
-## Refer to the link below for std error computations, see page 3
-## the standard error is the square root of the variance estimate
-## https://www.eia.gov/consumption/residential/data/2015/pdf/microdata_v3.pdf
-
-avg_temp_by_type_region =
- merge(
-   temps_by_type_region_repl, 
-   temps_by_type_region, 
-   by = c('region', 'type')
- ) %>%
- .[, .( avg_temp = avg_temp[1],
-        se = 2 * sqrt( mean( {avg_temp_repl - avg_temp}^2 ) ) 
-      ), 
-   .(type, region)]
-
-avg_temp_by_type_region[,
-    `:=`( lwr = avg_temp - qnorm(.975) * se, 
-          upr = avg_temp + qnorm(.975) * se ) ]
-
-# visualize the results: -------------------------------------------------------
-
-## New factor for nice labels
-avg_temp_by_type_region[, 
-  `Winter Temperature` := 
-            factor(type, 
-                   levels = c('temp_gone', 'temp_home', 'temp_night'),
-                   labels = c('when no one is home during day',
-                              'when someone is home during the day',
-                              'at night'
-                            )
+if ( debug == TRUE ) {
+  recs_mean5( recs_core,
+              target = c('temp_home', 'temp_gone', 'temp_night'),
+              by = 'region',
+              weight = 'weight',
+              new_var = c('home', 'gone', 'night')
             )
-]
-
-## Plot 1, organized by region
-avg_temp_by_type_region %>%
-  ggplot( aes(y = avg_temp, x = region, color = `Winter Temperature`) ) +
-    geom_point( position = position_dodge(width = 0.2)) +
-    geom_errorbar( aes(ymin = lwr, ymax = upr), 
-                   width = .1, position = position_dodge(width = 0.2)
-    ) +
-    theme_bw() +
-    xlab('US Census Region') +
-    ylab('Average Temperature, ºF') +
-    scale_color_manual( values = c("darkblue", "darkred", "orange") )
-
-## Plot 2, organized by type
-avg_temp_by_type_region %>%
-  ggplot( aes(y = avg_temp, x = `Winter Temperature`, color = region) ) +
-    geom_point( position = position_dodge(width = 0.2)) +
-    geom_errorbar( aes(ymin = lwr, ymax = upr), 
-                   width = .1, position = position_dodge(width = 0.2)
-    ) +
-    theme_bw() +
-#    xlab('US Census Region') +
-    ylab('Average Temperature, ºF') +
-    scale_color_manual( values = c("darkblue", "purple", "darkred", "orange")) +
-  coord_flip()
-                        
+  
+}
