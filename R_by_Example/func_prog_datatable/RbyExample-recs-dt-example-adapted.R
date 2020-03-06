@@ -10,10 +10,10 @@
 # Data Source:
 # https://www.eia.gov/consumption/residential/data/2015/index.php?view=microdata
 #
-# Updated: March 5, 2020
+# Updated: March 56, 2020
 # Author: James Henderson
 
-#setwd('~/github/CSCAR_Workshops/R_by_Example/recs_datatable/')
+#setwd('~/github/CSCAR_Workshops/R_by_Example/func_prog_datatable/')
   
 # libraries: -------------------------------------------------------------------
 library(tidyverse); library(data.table)
@@ -97,6 +97,7 @@ temps_by_type_region_b = recs_mean4(recs_long,
                                   new_var = 'avg_temp'
           )
 
+
 # replicate winter temperature estimates, for standard errors: -----------------
 
 ## 4 regions, 3 types, 96 replicate weights = 1,152 rows
@@ -115,21 +116,14 @@ temps_by_type_region_repl =
 ## the standard error is the square root of the variance estimate
 ## https://www.eia.gov/consumption/residential/data/2015/pdf/microdata_v3.pdf
 
-avg_temp_by_type_region =
- merge(
-   temps_by_type_region_repl, 
-   temps_by_type_region, 
-   by = c('region', 'type')
- ) %>%
- .[, .( avg_temp = avg_temp[1],
-        se = 2 * sqrt( mean( {avg_temp_repl - avg_temp}^2 ) ) 
-      ), 
-   .(type, region)]
-
-avg_temp_by_type_region[,
-    `:=`( lwr = avg_temp - qnorm(.975) * se, 
-          upr = avg_temp + qnorm(.975) * se ) ]
-
+avg_temp_by_type_region = 
+  recs_mean_brr4(
+    recs_long, 
+    weights_long, 
+    by = c('type', 'region'),
+    target = c('temp'),
+    on = 'id'
+  )
 # visualize the results: -------------------------------------------------------
 
 ## New factor for nice labels
@@ -146,26 +140,27 @@ avg_temp_by_type_region[,
 
 ## Plot 1, organized by region
 avg_temp_by_type_region %>%
-  ggplot( aes(y = avg_temp, x = region, color = `Winter Temperature`) ) +
+  ggplot( aes(y = temp, x = region, color = `Winter Temperature`) ) +
     geom_point( position = position_dodge(width = 0.2)) +
-    geom_errorbar( aes(ymin = lwr, ymax = upr), 
+    geom_errorbar( aes(ymin = temp_lwr, ymax = temp_upr), 
                    width = .1, position = position_dodge(width = 0.2)
     ) +
     theme_bw() +
     xlab('US Census Region') +
     ylab('Average Temperature, ºF') +
-    scale_color_manual( values = c("darkblue", "darkred", "orange") )
+    scale_color_manual( values = c("darkblue", "darkred", "darkorange") )
 
 ## Plot 2, organized by type
 avg_temp_by_type_region %>%
-  ggplot( aes(y = avg_temp, x = `Winter Temperature`, color = region) ) +
+  ggplot( aes(y = temp, x = `Winter Temperature`, color = region) ) +
     geom_point( position = position_dodge(width = 0.2)) +
-    geom_errorbar( aes(ymin = lwr, ymax = upr), 
+    geom_errorbar( aes(ymin = temp_lwr, ymax = temp_upr), 
                    width = .1, position = position_dodge(width = 0.2)
     ) +
     theme_bw() +
-#    xlab('US Census Region') +
     ylab('Average Temperature, ºF') +
-    scale_color_manual( values = c("darkblue", "purple", "darkred", "orange")) +
+    scale_color_manual( 
+      values = c("darkblue", "darkgreen", "darkred", "darkorange") 
+    ) +
   coord_flip()
                         
