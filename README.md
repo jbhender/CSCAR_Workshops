@@ -13,6 +13,8 @@ Dates in italics refer to the most recent presentation.
 
 ### R by Example (Series)
 
+[Machine Learning in R](./ML_in_R/) *March 19, 2020*
+
 [Functional Programming using data.table](./R_by_Example/func_prog_datatable/) *March 6, 2020*
 
 [Functional Programming using dplyr](./R_by_Example/func_prog_dplyr/) *February 20, 2020*
