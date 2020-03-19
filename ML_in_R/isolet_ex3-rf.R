@@ -15,7 +15,7 @@
 library(tidyverse); library(randomForest)
 
 # read in the data: ------------------------------------------------------------
-path = '~/github/mlexamples/data/'
+path = './data/'
 iso_train = data.table::fread(sprintf('%sisolet1+2+3+4.data', path), header = FALSE)
 iso_test = data.table::fread(sprintf('%sisolet5.data', path), header = FALSE)
 

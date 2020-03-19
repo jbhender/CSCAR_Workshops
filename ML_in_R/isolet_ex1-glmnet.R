@@ -26,7 +26,7 @@ cl = makeCluster(3)
 registerDoParallel(cl)
 
 # read in the data: -----------------------------------------------------------
-path = '~/github/mlexamples/data/'
+path = './data/'
 iso_train = fread(sprintf('%sisolet1+2+3+4.data', path), header = FALSE)
 iso_test = fread(sprintf('%sisolet5.data', path), header = FALSE)
 
