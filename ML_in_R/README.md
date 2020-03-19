@@ -14,17 +14,17 @@ Specifically, we’ll apply the elastic net (a generalization of ridge and lasso
 ## Resources
 
 [The Elements of Statistical Learning](https://web.stanford.edu/~hastie/ElemStatLearn/)
-An excellent general resource and the source for all the images on this psage. 
+An excellent general resource and the source for all the images on this page. 
 
 [Introduction to Machine Learning](https://m-clark.github.io/introduction-to-machine-learning/)
+Michael Clark's ML notes.
 
 ## Examples
 
-[Isolet data](https://archive.ics.uci.edu/ml/machine-learning-databases/isolet/)
-
-[isolet_ex1-glmnet.R](./isolet_ex1-glmnet.R)
-[isolet_ex2-glmnet.R](./isolet_ex2-xgboost.R)
-[isolet_ex3-rf.R](./isolet_ex3-rf.R)
++ [Isolet data](https://archive.ics.uci.edu/ml/machine-learning-databases/isolet/)
++ [isolet_ex1-glmnet.R](./isolet_ex1-glmnet.R)
++ [isolet_ex2-glmnet.R](./isolet_ex2-xgboost.R)
++ [isolet_ex3-rf.R](./isolet_ex3-rf.R)
 
 ## Machine Learning Concepts
 
@@ -57,16 +57,12 @@ and similar regression problems such as the Cox model. In addition to the usual
 likelihood based loss or deviance, it penalizes the regression coefficients $\beta$
 using:
 
-$$
-J(\beta; \alpha, \lambda) = \lambda \left( \frac{1 - \alpha}{2} ||\beta||^2_2 + \alpha||\beta||_1\right).
-$$
+$J(\beta; \alpha, \lambda) = \lambda \left( \frac{1 - \alpha}{2} ||\beta||^2_2 + \alpha||\beta||_1\right).$
 
 For a continuous response variable with a Guassian likelihood, the standard regression
 problem becomes:
 
-$$
-\hat \beta = \arg\min_{\beta} \frac{1}{2n}||Y-X\beta||^2 + J(\beta; \alpha, \lambda).
-$$
+$\hat \beta = \arg\min_{\beta} \frac{1}{2n}||Y-X\beta||^2 + J(\beta; \alpha, \lambda).$
 
 ### Key Functions and Arguments
 
@@ -80,7 +76,7 @@ $$
   - `intercept` if `TRUE` and intercept is fit. 
   
 + `cv.glmnet()` -
-  - parallel
+  - `parallel` to use a parallel backend
 
 ## Gradient Boosting
 
@@ -103,18 +99,44 @@ the latter being more common. Below is an image of a tree classifier taken from 
 
 ![](./img/Trees.png)
 
+Conceptually, I find it helpful to understand boosting using the original AdaBoost 
+algorithm given in the screenshot from ESL below.
+
+![](./img/adaboost.png)
+
+Gradient boosting is similar, except that rather than being the new classifier from each
+stage to the pseudo-residuals it instead fits the new classifier to negative gradients
+at each sample point. The algorithm, as given in ESL, appears below.
+
+![](./img/gradientboosting.png)
+
 ### Key Functions and Arguments
+
+The boosting example we'll review, [isolet_ex2-glmnet.R](./isolet_ex2-xgboost.R), 
+use the `xgboost` package which is an interface for the popular 
+[XGBoost](https://xgboost.readthedocs.io/en/latest/) library. 
 
 + `xgb.DMatrix` - construct a training matrix in the format used by `xboost`
 + `xgb.train` - trains the gradient boosted classifier
-  - params - a list of parameters controlling the model space and training
-  - data - the data as created using `xgb.DMatrix`
-  - nrounds - the maximum number of boosting rounds during training
-  - watchlist - used to get feedback on validation data as training progresses
+  - `params` - a list of parameters controlling the model space and training
+  - `data` - the data as created using `xgb.DMatrix`
+  - `nrounds` - the maximum number of boosting rounds during training
+  - `watchlist` - used to get feedback on validation data as training progresses
++ The `params` list has several important arguments. We'll focus on:
+  - `booster` - trees or linear models,
+  - `eta` - the learning rate, downscales the contribution of each new tree
+  - `max_depth` - the maximum depth of the trees
+  - `subsample` - subsampling at each step can help prevent overfitting
+  - `objective` - the objective function to use for fitting
+  - `eval_metric` - an evaluation metric to monitor on the validation data
 
-+
++ `predict` - S3 method for prediction,
+  - `ntreelimit` for prediction using the model from an earlier stage, to prevent overfitting.
 
 ## Random Forest
+
+Our final example, [isolet_ex3-rf.R](./isolet_ex3-rf.R), will use the `randomForest` package.
+It is also possible to build models akin to randomForests using the XGBoost library.
 
 ### Overview
 
@@ -125,5 +147,11 @@ dataset or cross-validation scheme largely redundant.
 
 Below is the random forest algorithm as described in ESL.
 ![](./img/rf-algo.png)
+
+### Key Functions and Arguments
+
+Our final example, [isolet_ex3-rf.R](./isolet_ex3-rf.R), will use the `randomForest` package.
+It is also possible to build models akin to randomForests using	the XGBoost library.
+
 
 
