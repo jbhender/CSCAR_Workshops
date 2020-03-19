@@ -30,9 +30,22 @@ Michael Clark's ML notes.
 
 ### Loss functions
 
-The *loss* or *objective* function describes how we measure the discrepency between our
+The *loss* or *objective* function measures the discrepency between obersved and predicted 
+values, sometimes also including a penalty on the model complexity. 
+
+It's important that the loss chosen reflects the scale of the response variable being 
+modelled. The most commonly used loss functions are:
+
++ Mean Squared Error for continuous responses / regression problems,
++ Logistic Loss or Binary Cross entropy for binary data,
++ multinomial or cross entropy for multi-category data.
 
 ### Training / Testing
+
+- Training data: Used to learn model parameters,
+- Validation data: Used to select hyperparameters for regularization or model class,
+- Test data: Used to independently assess model performance on "new" data not used
+in the model building process.
 
 ### Overfitting
 
@@ -71,7 +84,7 @@ data and the $5^{th}$ used for testing.  We will use the same distinction.
 
 For validation, we will use 10-fold cross validation assigning all data for each
 individual to the same fold. In this way, our validation evaluations will more closely
-resemble our intended tesitng scheme. 
+resemble our intended testing scheme. 
 
 ## Elastic Net
 
@@ -88,9 +101,14 @@ $J(\beta; \alpha, \lambda) = \lambda \left( \frac{1 - \alpha}{2} ||\beta||^2_2 +
 For a continuous response variable with a Guassian likelihood, the standard regression
 problem becomes:
 
+```
 $\hat \beta = \arg\min_{\beta} \frac{1}{2n}||Y-X\beta||^2 + J(\beta; \alpha, \lambda).$
+```
 
 ### Key Functions and Arguments
+
+In our first example, [isolet_ex1-glmnet.R](./isolet_ex1-glmnet.R), we will use
+the R package `glmnet`.  
 
 + `glmnet()` -
   - `x` the model matrix (usually without intercept) 
@@ -143,11 +161,13 @@ use the `xgboost` package which is an interface for the popular
 [XGBoost](https://xgboost.readthedocs.io/en/latest/) library. 
 
 + `xgb.DMatrix` - construct a training matrix in the format used by `xboost`
+
 + `xgb.train` - trains the gradient boosted classifier
   - `params` - a list of parameters controlling the model space and training
   - `data` - the data as created using `xgb.DMatrix`
   - `nrounds` - the maximum number of boosting rounds during training
   - `watchlist` - used to get feedback on validation data as training progresses
+
 + The `params` list has several important arguments. We'll focus on:
   - `booster` - trees or linear models,
   - `eta` - the learning rate, downscales the contribution of each new tree
@@ -179,5 +199,9 @@ Below is the random forest algorithm as described in ESL.
 Our final example, [isolet_ex3-rf.R](./isolet_ex3-rf.R), will use the `randomForest` package.
 It is also possible to build models akin to randomForests using	the XGBoost library.
 
-
++ `randomForest`
+  - `x` - a matrix of predictor variables,
+  - `y` - the reponse,
+  - `ntree` - how many trees to include in the model,
+  - `mtry` - how many variables to consider when splitting each node in a tree.
 
