@@ -23,7 +23,7 @@ Michael Clark's ML notes.
 
 + [Isolet data](https://archive.ics.uci.edu/ml/machine-learning-databases/isolet/)
 + [isolet_ex1-glmnet.R](./isolet_ex1-glmnet.R)
-+ [isolet_ex2-glmnet.R](./isolet_ex2-xgboost.R)
++ [isolet_ex2-xgboost.R](./isolet_ex2-xgboost.R)
 + [isolet_ex3-rf.R](./isolet_ex3-rf.R)
 
 ## Machine Learning Concepts
@@ -54,16 +54,16 @@ job of predicting training examples than new cases not used in model training. O
 can also be thought of as fitting a model with too much complexity -- hence, varaince -- than
 is warranted given the data.
 
-![](./training-error.png)
+![](./img/training-error.png)
 
-#### Cross validaiton
+#### Cross validation
 
 To prevent overfitting,	we generally use a validation data set or a cross validation 
 process to tune hyperparameters controlling model complexity. In cross validation, we
 split the training data into K-folds and iteratively put one fold in the role of the 
 validation set while using the other K-1 folds to train the model. 
 
-![](./cross-validation.png) 
+![](./img/cross-validation.png) 
 
 ## The Isolet data
 
