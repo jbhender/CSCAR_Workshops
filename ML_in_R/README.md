@@ -28,11 +28,35 @@ Michael Clark's ML notes.
 
 ## Machine Learning Concepts
 
+### Loss functions
+
+The *loss* or *objective* function describes how we measure the discrepency between our
+
+### Training / Testing
+
+### Overfitting
+
+Overfitting is the term used to describe the concept of training a model that does a better
+job of predicting training examples than new cases not used in model training. Overfititng
+can also be thought of as fitting a model with too much complexity -- hence, varaince -- than
+is warranted given the data.
+
+![](./training-error.png)
+
+#### Cross validaiton
+
+To prevent overfitting,	we generally use a validation data set or a cross validation 
+process to tune hyperparameters controlling model complexity. In cross validation, we
+split the training data into K-folds and iteratively put one fold in the role of the 
+validation set while using the other K-1 folds to train the model. 
+
+![](./cross-validation.png) 
+
 ## The Isolet data
 
 The [Isolet](https://archive.ics.uci.edu/ml/machine-learning-databases/isolet/)
 dataset we will use for examples today consists of data from recordings of
-XX individuals pronouncing each letter of the English alphabet. It is *tabular*
+individuals pronouncing each letter of the English alphabet. It is *tabular*
 data meaning that features (variables) of interest have already been extracted.
 
 Because each person vocalizes more than one letter, our data are not independent.
@@ -57,7 +81,9 @@ and similar regression problems such as the Cox model. In addition to the usual
 likelihood based loss or deviance, it penalizes the regression coefficients $\beta$
 using:
 
+```
 $J(\beta; \alpha, \lambda) = \lambda \left( \frac{1 - \alpha}{2} ||\beta||^2_2 + \alpha||\beta||_1\right).$
+```
 
 For a continuous response variable with a Guassian likelihood, the standard regression
 problem becomes:
