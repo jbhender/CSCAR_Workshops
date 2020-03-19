@@ -1,14 +1,20 @@
 # Machine Learning in R
 
 ## About
-* This workshop is being held online, registered participants should
+
+*This workshop is being held online, registered participants should
 have recieved a link to a BlueJeans meeting at their umich email address.*
 
-[March 19, 2-4pm](https://ttc.iss.lsa.umich.edu/ttc/sessions/machine-learning-in-r/)
+Last given: [March 19, 2-4pm](https://ttc.iss.lsa.umich.edu/ttc/sessions/machine-learning-in-r/)
+
+In this workshop, we’ll first discuss core machine learning concepts such as: choosing loss functions and evaluation metrics; splitting the data into training, validation, and testing sets; and cross-validation patterns for tuning hyper-parameters. Next, we’ll apply these concepts to train models for identifying isolated letters from speech (https://archive.ics.uci.edu/ml/datasets/isolet).
+
+Specifically, we’ll apply the elastic net (a generalization of ridge and lasso regression), random forests, and gradient boosting to this task.  We’ll briefly discuss each model/method but our primary focus will be on understanding the core functionality of the related R packages (glmnet, randomForests, xgboost) and tuning associated hyper-parameters.
 
 ## Resources
 
 [The Elements of Statistical Learning](https://web.stanford.edu/~hastie/ElemStatLearn/)
+An excellent general resource and the source for all the images on this psage. 
 
 [Introduction to Machine Learning](https://m-clark.github.io/introduction-to-machine-learning/)
 
@@ -16,7 +22,9 @@ have recieved a link to a BlueJeans meeting at their umich email address.*
 
 [Isolet data](https://archive.ics.uci.edu/ml/machine-learning-databases/isolet/)
 
-[Data
+[isolet_ex1-glmnet.R](./isolet_ex1-glmnet.R)
+[isolet_ex2-glmnet.R](./isolet_ex2-xgboost.R)
+[isolet_ex3-rf.R](./isolet_ex3-rf.R)
 
 ## Machine Learning Concepts
 
@@ -60,8 +68,6 @@ $$
 \hat \beta = \arg\min_{\beta} \frac{1}{2n}||Y-X\beta||^2 + J(\beta; \alpha, \lambda).
 $$
 
-
-
 ### Key Functions and Arguments
 
 + `glmnet()` -
@@ -73,7 +79,8 @@ $$
   - `standardize` if `TRUE`, internally rescales columns of `x` to have variance 1
   - `intercept` if `TRUE` and intercept is fit. 
   
-+ `cv.glmnet()` 
++ `cv.glmnet()` -
+  - parallel
 
 ## Gradient Boosting
 
@@ -83,7 +90,18 @@ Boosting is a method for building an additive classifier or regression function 
 a collection of simpler functions such as linear models or trees.  There are three
 key ideas:
 
-+ Simpler classifiers are combined sequentially,
++ Simpler classifiers such as trees are combined sequentially;
++ At each step, samples are re-weighted to give more influence to high-residual or
+misclassified samples;
++ The final model is a weighted sum of the models learned in each step. 
+
+Below is a screenshot of Figure 10.1 from ESL depicting the boosting concept.
+![](./img/boosting.png)
+
+The "weak" classifiers used in boosting can be linear classifiers or trees, with
+the latter being more common. Below is an image of a tree classifier taken from ESL.
+
+![](./img/Trees.png)
 
 ### Key Functions and Arguments
 
