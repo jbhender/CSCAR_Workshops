@@ -11,10 +11,10 @@
 # Author: James Henderson
 
 #setwd('~/github/CSCAR_Workshops/R_by_Example/func_prog_datatable/')
-debug = TRUE
+debug = FALSE
 if ( debug == TRUE ) { 
   library(tidyverse); library(data.table)
-  recs = fread('../recs_datatable/recs2015_public_v4.csv')  
+  recs = fread('./recs_datatable/recs2015_public_v4.csv')  
   
   # clean up key variables used in this problem: -------------------------------
   neg_to_na = function(x) {
@@ -443,7 +443,7 @@ recs_mean_brr4 = function(dt, weights_long, on = 'id',
   #              and weights long on which to join the two
   #         by - a character vector identifying the variables in dt on which 
   #              to group
-  #         target - a length one character vector identifying the variable in
+  #         target - a character vector identifying the variables in
   #                  dt to summarize
   #         dt_weight_var - the name of the weight variable in dt
   #         wl_weight_var - the name of the weight variable in weights_long

@@ -11,10 +11,10 @@
 # Author: James Henderson
 
 #setwd('~/github/CSCAR_Workshops/R_by_Example/func_prog_datatable/')
-debug = TRUE
+debug = FALSE
 if ( debug == TRUE ) { 
   library(tidyverse); library(data.table)
-  recs = fread('../recs_datatable/recs2015_public_v4.csv')  
+  recs = fread('./recs_datatable/recs2015_public_v4.csv')  
   
   # clean up key variables used in this problem: -------------------------------
   neg_to_na = function(x) {

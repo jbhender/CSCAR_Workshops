@@ -18,6 +18,10 @@
 # libraries: -------------------------------------------------------------------
 library(tidyverse); library(data.table)
 
+# functions for working with RECS data: ----------------------------------------
+source('./RbyExample-fpdt-functions0.R')
+source('./RbyExample-fpdt-functions1.R')
+
 # data: ------------------------------------------------------------------------
 url = paste0(
   'https://www.eia.gov/consumption/residential/data/2015/csv/',
@@ -82,15 +86,14 @@ recs_long =
         value.name = 'temp'
   )
 
-
-temps_by_type_region = recs_mean0(recs_long)
-temps_by_type_region = recs_mean1(recs_long)
-temps_by_type_region = recs_mean2(recs_long, by = c('type', 'region'))
-temps_by_type_region = recs_mean3(recs_long,
-                                  target = 'temp',
-                                  weight = 'weight', 
-                                  by = c('type', 'region')
-                       )
+#temps_by_type_region = recs_mean0(recs_long)
+#temps_by_type_region = recs_mean1(recs_long)
+#temps_by_type_region = recs_mean2(recs_long, by = c('type', 'region'))
+#temps_by_type_region = recs_mean3(recs_long,
+#                                  target = 'temp',
+#                                  weight = 'weight', 
+#                                  by = c('type', 'region')
+#                       )
 temps_by_type_region_b = recs_mean4(recs_long, 
                                   target = 'temp', 
                                   by = c('type', 'region'),

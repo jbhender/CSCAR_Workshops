@@ -1,5 +1,14 @@
 # R by Example: Functional Programming with data.table
 
+## Files
+
+Here is a list of files to which we will refer in this workshop.
+
+- [RbyExample-recs_dt-example.R](../recs_datatable/RbyExample-recs_dt-example.R)
+- [RbyExample-recs-dt-example-adapted.R](./RbyExample-recs-dt-example-adapted.R)
+- [RbyExample-fpdt-functions0.R](./RbyExample-fpdt-functions0.R)
+- [RbyExample-fpdt-functions1.R](./RbyExample-fpdt-functions1.R)
+
 ## Background
 
 ### Functional Programming
@@ -36,7 +45,7 @@ We use the `function` keyword along with 0 or more agruments.  Arguments can
 be given defaults. Optional arguments can default to NULL.  
 
 ### Function style
-A good style rule is to always document a functions inputs and outputs:
+A good style rule is to always document a function's inputs and outputs:
 
 ```r
 my_func = function( arg1, arg2 = 5, arg3 = NULL) {
@@ -70,37 +79,46 @@ Some patterns frequently repeated among the example and solutions are:
 1. computing weighted sums by group,
 1. using the replicate weight method to compute standard errors and confidence
 bounds,
-1. replacing numeric codes with labeled factors using the codebook.
 
 We will write functions encapsulating each of these patterns in order 
 to allow us to more efficiently explore the RECS data. 
 
-## Example 1
+#### Example 1
 
-In this example, we begin adapting the instructor [example](https://jbhender.github.io/CSCAR_Workshops/R_by_Example/recs_datatable/RbyExample-recs_d-example.R) from the previous workshop to encapsulate the patterns of
+In this example, we begin adapting the instructor 
+[example](https://jbhender.github.io/CSCAR_Workshops/R_by_Example/recs_datatable/RbyExample-recs_dt-example.R)
+ from the previous workshop to encapsulate the patterns of
 weighted sums by group and fix ideas. The final product can be viewed [here](./RbyExample-recs-dt-example-adapted.R).
 
-## Example 2
+The series of functions we will create can be found [here](./RbyExample-fpdt-functions0.R).  
+In practice, you would only write one version of the function. I am including multiple versions
+here to emphasize the development process. 
 
-This is an extension of example 1, but now encapsulates the 
-replicate weight pattern.
+#### Example 2
 
-## Example 3
+This is an extension of example 1, but now encapsulates the replicate weight pattern. 
+The functions we write can be found [here](./RbyExample-fpdt-functions0.R). 
 
-In this example, we write a function to transform variables using labels read
-from the codebook. The final product can be viewed [here](./RbyExample-fpd-example1.R).
-
-## Tips for writing functions using data.tale
+## Tips for writing functions to avoid repeating yourself
 
 1. Start simple and don't be afraid to do some of the work outside of the function.
 
-1. Recall that `by` and `keyby` accept character strings as well as bare variable
-names.
+1. Make one change at a time on the path from a function which blindly repeats what
+you originally typed to one with sufficient flexibility to allow for repeated use. 
 
-1. Use `.SD[[..var]]` to access a specific variable using a character string `var`.
+1. Write tests that cover intended use cases before writing the function. 
+
+## Tips for writing functions using data.tale
+
+1. Recall that `by` and `keyby` accept character vectors as well as bare variable
+names. Use character vectors for programming. 
+
+1. Use the pattern `.SD[[..var]]` to access a specific variable using a character string `var`.
+We use `..var` in the `j` argument to `[.data.table` to indicate we are referring to a variable
+in the parent enviroment rather than a column in the data.table. 
 
 1. Not everything needs to be done in a single step. Use `set` functions such as
-   `setnames` to modify in place.
+   `setnames()` or `set()` to modify in place.
 
 1. Use `.SDcols` to control which columns are in the data.table `.SD`. 
 
