@@ -101,9 +101,9 @@ J(\beta; \alpha, \lambda) = \lambda \left( \frac{1 - \alpha}{2} ||\beta||^2_2 + 
 For a continuous response variable with a Guassian likelihood, the standard regression
 problem becomes:
 
-```
-$\hat \beta = \arg\min_{\beta} \frac{1}{2n}||Y-X\beta||^2 + J(\beta; \alpha, \lambda).$
-```
+\[
+\hat \beta = \arg\min_{\beta} \frac{1}{2n}||Y-X\beta||^2 + J(\beta; \alpha, \lambda).
+\]
 
 ### Key Functions and Arguments
 
