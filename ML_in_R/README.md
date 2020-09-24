@@ -5,7 +5,7 @@
 *This workshop is being held online, registered participants should
 have recieved a link to a BlueJeans meeting at their umich email address.*
 
-Last given: [March 19, 2-4pm](https://ttc.iss.lsa.umich.edu/ttc/sessions/machine-learning-in-r/)
+Last given: [March 19, 2020, 2-4pm](https://ttc.iss.lsa.umich.edu/ttc/sessions/machine-learning-in-r/)
 
 In this workshop, we’ll first discuss core machine learning concepts such as: choosing loss functions and evaluation metrics; splitting the data into training, validation, and testing sets; and cross-validation patterns for tuning hyper-parameters. Next, we’ll apply these concepts to train models for identifying isolated letters from speech (https://archive.ics.uci.edu/ml/datasets/isolet).
 
@@ -21,7 +21,7 @@ Michael Clark's ML notes.
 
 ## Examples
 
-+ [Isolet data](https://archive.ics.uci.edu/ml/machine-learning-databases/isolet/)
++ [isolet data](https://archive.ics.uci.edu/ml/machine-learning-databases/isolet/)
 + [isolet_ex1-glmnet.R](./isolet_ex1-glmnet.R)
 + [isolet_ex2-xgboost.R](./isolet_ex2-xgboost.R)
 + [isolet_ex3-rf.R](./isolet_ex3-rf.R)
@@ -94,9 +94,9 @@ and similar regression problems such as the Cox model. In addition to the usual
 likelihood based loss or deviance, it penalizes the regression coefficients $\beta$
 using:
 
-```
-$J(\beta; \alpha, \lambda) = \lambda \left( \frac{1 - \alpha}{2} ||\beta||^2_2 + \alpha||\beta||_1\right).$
-```
+\[
+J(\beta; \alpha, \lambda) = \lambda \left( \frac{1 - \alpha}{2} ||\beta||^2_2 + \alpha||\beta||_1\right).
+\]
 
 For a continuous response variable with a Guassian likelihood, the standard regression
 problem becomes:
