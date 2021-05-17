@@ -1,0 +1,168 @@
+---
+title: "A ggplot2 primer"
+output: html_notebook
+editor_options: 
+  chunk_output_type: inline
+---
+
+## About
+
+Describe the workshop and ggplot2 here.
+
+Because `ggplot2` is part of the [tidyverse](tidyverse.org)
+```{r about-a}
+library(tidyverse)
+```
+
+
+## 1: Terminology
+
+To introduce `ggplot2` terminology, let's first inspect ad reproduce the base R 
+plot below. 
+
+### Base R plotting
+```{r 1a}
+plot(cars)
+```
+To understand this code, note that `plot()` is an S3 generic function and that
+`cars` is of class data.frame. We can use `getS3method()` to find the method
+dispatched to plot the function above. 
+
+```{r 1b}
+class(cars)
+getS3method('plot', class(cars))
+```
+
+Note that these plotting functions are imperative - they specify how the plot
+should be drawn.  
+
+### frames
+
+The first step to recreating this plot in `ggplot2` is to set up a frame. We
+do this by passing a data set (an object of class `data.frame`) to the `data` 
+argument
+
+```{r 1c}
+ggplot(cars)
+```
+### aesthetics
+
+Aesthetics are mappings between columns in our data to visual features. The
+first two aesthetics we'll use here are `x` and `y` mapping columns to the
+horizontal and vertical axes, respectively.
+
+```{r 1d}
+ggplot(cars, aes(speed, dist))
+```
+With mappings specified for the `x` and `y` aesthetics, `ggplot` can specify
+a scale, limits, and labels for the two axes in the plotting frame.  
+
+### geometries
+
+Geometries or "geoms" are used to add layers of visual information to a frame
+setup using `ggplot()`. Points can be added using `geom_point()`. 
+
+```{r, 1e}
+ggplot(cars, aes(speed, dist)) +
+  geom_point() 
+```
+
+There are many geometries in ggplot2. To hunt for useful geometries, use Google
+and search "ggplot2 [type of plot]".  Or, use the auto-complete function at the
+console, `> geom_` and scroll through the list. 
+
+## themes
+
+Themes are used to customize the non-data components of a plot. There are lots
+of options here, but to begin stick to one of the complete themes. See 
+`help(ggtheme)`. 
+
+```{r 1f}
+ggplot(cars, aes(x = speed, y = dist)) +
+  geom_point() + 
+  theme_bw() 
+```
+
+### Exercise
+
+```{r 1g}
+ggplot(cars, aes(x = speed, y = dist)) +
+  geom_point() + 
+  theme_bw() 
+```
+
+1. Look at `help(ggtheme)` and replace `theme_bw()` above with several of the
+other options. 
+
+  a. Which theme most closely resembles the base R plot? 
+  b. Which theme do you personally prefer? 
+
+## 2: Aesthetics
+
+In `ggplot2` each "geom" has required and optional aesthetics. Always reference
+the list under `Aesthetics` on the help page for a geom you want to use. 
+Required aesthetics are listed first and appear in bold.  
+
+Mappings between aesthetics and columns in the plotting data are made using
+the `aes()` function and passed to the `mapping` argument of each geom. Unless
+you specify `inherit.aes = FALSE` (rarely used), any mappings passed using
+`aes()` in the initial `ggplot()` call will be used as defaults when no
+aesthetic mapping is specified for a given geom. 
+
+```{r 2a}
+ggplot(mtcars, aes(x = wt, y = mpg, shape = factor(cyl)) ) +
+  geom_point() 
+```
+
+
+Aesthetics can also be set to fixed values by passing them by name, using
+`...`, to a geom. 
+
+```{r 2b}
+ggplot(cars, aes(x = speed, y = dist)) +
+  geom_point(shape = 1) +
+  theme_classic()
+```
+### Exercise
+
+```{r 2c}
+df = data.frame(
+  x = 1:25,
+  y = 1:25,
+  z = factor(1:25),
+  z_rev = factor(25:1, levels = paste(1:25))
+)
+ggplot(df[1:3, ], aes(x = x, y = y)) +
+  geom_point(
+    aes(fill = z, size = x),
+    shape = 25, 
+    color = 'darkred',
+    stroke = 3
+    ) +
+  theme_classic() 
+```
+
+
+## 3: `ggplot2` is declarative
+
+Unlike many imperative, functional, `plot` methods in base R, `ggplot2` is 
+meant to be used [declartively][1]. This means we specify *what* we want the
+plot to look like not *how* it should be drawn. 
+
+To understand this, consider the code below.  The `ggplot` object `p1` below
+is a set of instructions for how to create a plot.  When we modify those
+instructions to create `p2` by "adding" `geom_point()` nothing changes in our
+plotting frame. Only when we "print" `p2` is the modified plot drawn. By
+adding `geom_point()` to `p1` we are changing what we want the plot to look
+like but are not directly modifying the underlying instructions (the "grob"). 
+
+```{r 3a}
+p1 = ggplot(cars, aes(x = speed, y = dist))  +
+  theme_classic() 
+p2 = p1 + geom_point(shape = 1)
+p2
+```
+
+
+[1]: https://en.wikipedia.org/wiki/Declarative_programming
+
