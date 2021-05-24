@@ -1,10 +1,9 @@
-# CSCAR Workshops (James)
+# CSCAR Workshops
 
-## About
-
-This repository collects public files for my 
+This repository collects public files for 
 [CSCAR](https://cscar.research.umich.edu)
-[workshops](https://cscar.research.umich.edu/events/category/workshops/).  
+[workshops](https://cscar.research.umich.edu/events/category/workshops/)
+given by me, James Henderson, PhD. 
 
 
 ## Workshops
