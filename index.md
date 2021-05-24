@@ -3,9 +3,9 @@
 ## About
 
 This repository collects public files for my 
-[CSCAR](cscar.research.umich.edu) [workshops](https://cscar.research.umich.edu/events/category/workshops/).  
+[CSCAR](https://cscar.research.umich.edu)
+[workshops](https://cscar.research.umich.edu/events/category/workshops/).  
 
-See below for a list.
 
 ## Workshops
 
