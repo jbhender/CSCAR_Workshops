@@ -1,37 +1,42 @@
-## Welcome to GitHub Pages
 
-You can use the [editor on GitHub](https://github.com/jbhender/CSCAR_Workshops/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+## About
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+This repository collects public files for my 
+[CSCAR](cscar.research.umich.edu) [workshops](https://cscar.research.umich.edu/events/category/workshops/).  
 
-### Markdown
+See below for a list.
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+## Workshops
 
-```markdown
-Syntax highlighted code block
+Dates in italics refer to the most recent presentation. 
 
-# Header 1
-## Header 2
-### Header 3
+## R
 
-- Bulleted
-- List
+### R by Example (Series)
 
-1. Numbered
-2. List
+[Machine Learning in R](./ML_in_R/) *March 19, 2020*
 
-**Bold** and _Italic_ and `Code` text
+[Functional Programming using data.table](./R_by_Example/func_prog_datatable/) *March 6, 2020*
 
-[Link](url) and ![Image](src)
-```
+[Functional Programming using dplyr](./R_by_Example/func_prog_dplyr/) *February 20, 2020*
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+[Analyzing RECS using data.table](./R_by_Example/recs_datatable/) *February 6, 2020*
 
-### Jekyll Themes
+[Analyzing RECS using Tidyverse](./R_by_Example/recs_dplyr/) *January 30, 2020*
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/jbhender/CSCAR_Workshops/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+### Other R Topics
 
-### Support or Contact
+[Rcpp: Integrating C++ into R](./rcpp/) *November 22, 2019*
 
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+[Data Management in R with data.table](./data.table/) *Sep 20, 2019*
+
+[Back to a Future: Asynchronous Computing with Futures in R](./future/) *October 18, 2019*
+
+[Spin Class: No Sweat Reports in R](./spin/) *July 25, 2019*
+
+Strings and Dates in R *October 5, 2018*
+
+## Statistical Techniques
+
+[Dimension Reduction Techniques](https://jbhender.github.io/workshops/DimensionReduction.html)
+*November 9, 2018* 
