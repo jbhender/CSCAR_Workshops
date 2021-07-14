@@ -1,0 +1,506 @@
+---
+title: "R Short Course: Part 1"
+author: "<a href='https://github.com/jbhender/CSCAR_Workshops/tree/main/rsc/'>R Short Course</a>"
+date: ""
+output: 
+  html_document:
+    toc: true
+    toc_depth: 4
+    theme: journal
+    highlight: pygments
+    css: ../../styles.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(prompt = FALSE)
+knitr::opts_chunk$set(highlight = TRUE)
+```
+
+## ![](../../icons/Observe.png){width='25px'} About R
+
+```{r logo, out.width="100px", out.height="100px", echo=FALSE}
+knitr::include_graphics("../../icons/Rlogo.png")
+```
+
+As described by [The R Foundation](https://www.r-project.org/about.html), 
+"R is a language and environment for statistical computing and graphics." 
+Importantly, R is open-source, free software distributed 
+under a GNU GPL-3 license. 
+
+It is also easily extensible through contributed packages that cover much of 
+modern statistics and data science.
+
+### RStudio
+
+[RStudio](https://www.rstudio.com/) is an "integrated development environment" 
+(IDE) for working with R that 
+simplifies many tasks and makes for a friendlier introduction to R.
+It provides a nice interface via [Rmarkdown](http://rmarkdown.rstudio.com/)
+for integrating R code with text for creating documents. 
+
+RStudio is distributed by a company of the same name that also offers a number
+of related products for working with data: Shiny for interactive graphics along 
+with enterprise and server editions. I suggest you use RStudio when feasible to
+streamline your work flow. 
+
+## R Basics {#basics}
+
+###  ![](../../icons/Observe.png){width='25px'} Objects 
+
+Nearly everything in **R** is an object that can be referred to by name. 
+
+#### Assignment
+
+We generally create objects by assigning values to them:
+
+```{r 1}
+# This is a comment ignored by R
+instructor <- 'Dr. Henderson'
+x <- 10
+y <- 32
+z <- c(x, y) #Form vectors by combining or concatenating elements.
+
+9 -> w # This works, but is bad style.
+the_answer = 42 # Most other languages use = for assignment.
+```
+
+The values can be referred to by the object name:
+
+```{r 2}
+the_answer
+```
+
+#### Naming Objects
+Object names can be any syntactically [valid](https://stat.ethz.ch/R-manual/R-devel/library/base/html/make.names.html)
+name. You should, however, avoid clobbering built 
+in `R` names such as `pi`, `mean`, `sum`, etc.
+
+You also should not use 
+[reserved words](https://stat.ethz.ch/R-manual/R-devel/library/base/html/Reserved.html)
+when naming objects.
+
+You should generally use meaningful, descriptive names for objects you create.
+There are various styles for creating object names with multiple words:
+
+  - `snake_case` : separate words with an underscore
+  - `camelCase` : capitalize subsequent words
+  - `dot.case` : separate words with a period
+
+Following the tidyverse style guide, you should use `snake_case` in code you
+write for this course. Avoid `dot.case` and `camelCase`. 
+
+#### Non-syntactic names  
+
+For purposes of presentation, you may occasionally want to use 
+*non-syntactic names* or names that break the rules above. 
+Use back-ticks (i.e. \`object name\`) to create non-syntactic names:
+
+```{r 2.1}
+`Value ($)` = 1e3
+`Value ($)`
+```
+
+#### ![](../../icons/code_style.png){width='25px'} *Style notes*
+
+Generally speaking, you do not need to adopt all aspects of my coding style.
+However, I recommend you develop and use a *consistent style* of your own.  
+
+In particular, I would strongly recommend the following common but 
+non-universal style conventions:
+
+ 1. Please use `snake_case` when [naming objects](https://www.r-bloggers.com/consistent-naming-conventions-in-r/).
+ 2. Do not use CAPITAL letters in object names. 
+ 3. Always include a space after a comma `, `. 
+ 4. Use `=` or `<-` for assignment universally - do not mix and match. 
+
+#### Value vs Reference
+It is important to know that in **R** objects are (typically) stored
+by value and __not__ by reference:
+
+```{r, 3}
+x = 10
+y = 32
+z = c(x, y)
+c(x, y, z)
+y = the_answer
+c(x, y, z)
+```
+
+In contrast, if `z = c(x, y)` were a reference to the contents of `x` and `y`
+then changing `y` would change `z` and the value referred to by `z` as well.
+
+At a more technical level, *R* has *copy on modify semantics* and uses
+*lazy evaluation* meaning objects at times are stored by reference. 
+However, for reasoning about R 
+programs it is generally sufficient to think of objects holding values rather 
+than references to values. 
+
+Later in this lesson we will learn how to create objects without
+assigning specific values to them.  
+
+## Global Environment {#global_environment}
+
+An environment is a context in which the names we use to refer to **R** 
+objects have meaning.  For now, it is sufficient to know that the default
+environment where objects are assigned is called the **global environment**.
+You can list objects in the global environment using the function `ls()` and 
+can remove objects using `rm()`. [Note the similarity to the Linux shell. ]
+
+```{r, 4}
+ls()
+rm(the_answer)
+ls()
+```
+
+We can remove multiple objects in a few ways:
+```{r, 5}
+remove(instructor, the_answer) # remove and rm are synonyms
+ls()
+rm( list = c('x', 'y') ) # Object names are passed to list as strings
+ls()
+```
+
+To remove all objects from the global environment use 'rm( list = ls() )':
+```{r, 6}
+ls()
+rm( list = ls() )
+ls()
+```
+
+### Programmatic assignment
+
+Occasionally, you may write a program where you need to access or assign
+an object whose name you do not know ahead of time.  In these cases you may 
+wish to use the `get()` or `assign()` functions. 
+
+```{r, 7a}
+# Ex 1
+rm( list = ls() )
+ls()
+assign("new_int", 9) # i.e. new_int = 9
+ls()
+get("new_int")
+
+# Ex 2
+rm( list = ls() )
+obj = 'obj_name'; val = 42
+assign(obj, value = val) # assign the value in 'val' to the value in 'obj'
+ls()
+obj
+obj_name
+```
+
+## ![](../../icons/Observe.png){width='25px'} Arithmetic operations {#arithmetic}
+**R** can do arithmetic with objects that contain numeric types.
+
+```{r, 7b}
+x = 10; y = 32
+z = x + y 
+x + y
+z / x
+z^2
+z + 2 * c(y, x) - 10  
+
+11 %% 2   # Modular arithmetic (i.e. what is the remainder)
+11 %/% 2  # Integer division discards the remainder 
+```
+
+Be careful about mixing vectors of different lengths as **R** will generally
+recycle values:
+
+```{r, 8}
+x = 4:6
+y = c(0, 1)
+x * y
+```
+
+```{r, 9}
+x = 1:4
+y * x
+```
+
+There are a number of common mathematical functions already in **R**:
+```r
+mean(x) # average
+sum(x)  # summation
+sd(x)   # Standard deviation
+var(x)  # Variance
+exp(x)  # Exponential
+sqrt(x) # Square root
+log(x)  # Natural log
+sin(x)  # Trigonometric functions
+cos(pi / 2) # R even contains pi, but only does finite arithmetic
+floor(x / 2) #The nearest integer below
+ceiling(x / 2) #The nearest integer above
+```
+
+When doing math in **R** or another computing language, be cognizant of the
+fact that numeric doubles have finite precision.  
+This can sometimes lead to unexpected results as seen here:
+
+```{r, 10}
+sqrt(2)^2 - 2
+
+# floating point addition not commutative 
+{.1 + .7 + .2} == 1
+{.7 + .2 + .1} == 1
+```
+
+### ![](../../icons/code_style.png){width='25px'} *Style notes*
+
+ - Always include a space on either side of binary operators, e.g. `a + b` not 
+ `a+b` with the exception of high precedence operators. 
+ e.g. `a + b^2`, `1:3 + 2`.  
+ 
+#### ![](../../icons/Laptop.png){width='25px'} Exercises
+
+For each snippet of **R** code below, compute the value of `z` without using
+**R**.  Use **R** to check your work when done. 
+
+1.  What is the value of `z`?
+
+```r
+x = 10
+y = c(9, 9)
+z = x
+z = y
+z = sum(z)
+```
+
+2.  What is the value of `z`?
+
+```r
+x = -1:1
+y = rep(1, 10)
+z = mean(x * y)
+```
+
+3. Which do you think is larger `e0` or `e1`? Why? What is the value of `z`?
+
+```{r, 11}
+x0 = 1:10000
+y0 = x0 * pi / max(x0)
+e0 = sum( abs( cos(y0)^2 + sin(y0)^2 - 1 ) )
+
+x1 = 1:100000
+y1 = x1 * pi / max(x1)
+e1 = sum( abs( cos(y1)^2 + sin(y1)^2 - 1 ) )
+
+z = floor( e1 / e0 )
+```
+
+## ![](../../icons/Observe.png){width='25px'}  The **R** package system {#packages}
+
+Much of the utility of **R** is derived from an extensive collection of user
+and domain-expert contributed packages. Packages are simply a standardized way
+for people to share *documented* code and data. There are thousands of packages,
+likely [more than 10,000](http://blog.revolutionanalytics.com/2017/01/cran-10000.html)
+officially distributed through the CRAN alone!
+
+Packages are primarily distributed through three sources:
+
+  + [CRAN](https://cran.r-project.org/) 
+  + [Github](http://r-pkgs.had.co.nz/git.html)
+  + [Bioconductor](https://www.bioconductor.org/)
+
+#### Installing packages
+The primary way to install a package is using `install.packages("pkg")`.
+```{r, 21}
+#install.packages('lme4') # the package name should be passed as a character string
+```
+
+You can find the default location for your **R** packages using the `.libPaths()`
+function. If you don't have write permission to this folder, 
+you can set this directory to a personal library instead.
+
+```{r, 22}
+.libPaths() ## The default library location
+.libPaths('/Users/jbhender/Rlib') #Create the directory first!
+.libPaths()
+```
+
+To install a package to a personal library use the 'lib' option.
+```{r, 23}
+## install.packages("haven",lib='/Users/jbhender/Rlib')
+```
+
+Use the above with caution and only when necessary. 
+
+If your computer has the necessary tools, packages can also be installed from
+source by downloading the package file and pointing directly to the 
+source tar ball (`.tgz`) or Windows binary.  
+
+### Using packages in **R**
+Installing a package does not make it available to **R**. There are two ways to
+use things from a package: 
+
+  + calling `library("pkg")` to add it to the search path,
+  + using the `pkg::obj` construction to access a package's exported objects,
+  + using the `pkg:::obj` to access non-exported objects.
+
+These methods are illustrated below using the data set `InstEval` distributed
+with the 'lme4' package.
+
+```{r, 24}
+#head(InstEval)
+## Using the pkg::function construction
+head(lme4::InstEval)
+```
+
+The `library("pkg")` command adds a package to the search path.
+```{r, 25}
+search()
+library(lme4)
+search()
+head(InstEval)
+```
+
+To remove a library from the search path use
+`detach("package:pkg", unload = TRUE)`.
+```{r, 26}
+detach(package:lme4, unload = TRUE)
+search()
+```
+#### ![](../../icons/Laptop.png){width='25px'} Exercises
+
+1. Find the default location for R packages on:
+   - your personal computer
+   - the *scs* servers
+
+2. Install the following R packages (at home): 
+  - [tidyverse](https://www.tidyverse.org/): a collection of packages developed
+  by Hadley Wickham and others 
+  - [data.table](https://github.com/Rdatatable/data.table/wiki): we will use 
+  this later in the course and briefly below
+
+## ![](../../icons/Observe.png){width='25px'} Input and output {#io}
+
+**R** is primarily and *in-memory* language, meaning it is designed to work with
+objects stored in working memory (i.e. *RAM*) rather than on disk. 
+Therefore, it is essential to know how to read and write data from disk.
+
+### Delimited Data 
+
+Data is commonly shared as flat (maybe compressed) text files often delimited
+by commas (e.g. `.csv`), tabs or `'\t'` (e.g. `.tab`, `.txt`), or one+ 
+white space characters (e.g. `.data`, `.txt`). 
+
+#### Base R
+In the base `R` packages, these can be read using `read.table` and its wrappers
+like `read.csv`. To read the file at `../data/recs2015_public_v4.csv`, 
+use `read.table()` and assign the input to an object.
+
+```{r, 26a}
+recs = read.table( '../../data/recs2015_public_v4.csv', sep = ',', 
+                   stringsAsFactors = FALSE, header = TRUE)
+dim(recs)
+class(recs)
+```
+
+These functions return `data.frames` which are special *lists* whose members
+all have the same length (i.e. the number of rows.)
+
+Likewise, you can write delimited files using `write.table` or `write.csv`.
+
+```{r, 27}
+write.table(lme4::InstEval, file = '../../data/InstEval.txt', sep = '\t', 
+            row.names = FALSE)
+```
+
+#### (Tidyverse) readR
+
+The `readR` package distributed with the tidyverse offers a more efficient 
+version of the above with (arguably) better defaults.
+
+```{r, 28, warning=FALSE, message=FALSE}
+recs_tib = readr::read_delim('../../data/recs2015_public_v4.csv', delim=',')
+dim(recs_tib)
+class(recs_tib)
+```
+
+Similarly there is a `readr::write_delim` function. 
+
+#### data.table
+
+My personal favorite functions for reading and writing delimited data are 
+`data.table::fread()` and `data.table::fwrite()`. 
+
+```{r, 29, warning=FALSE, message=FALSE}
+recs_dt = data.table::fread('../../data/recs2015_public_v4.csv')
+dim(recs_dt)
+class(recs_dt)
+```
+
+You can even pass a command line argument to prepocess your data before
+reading it in:
+
+```{r, 30, warning=FALSE, message=FALSE}
+recs_dt = data.table::fread('gunzip -c ../../data/recs2015_public_v4.csv.gz')
+```
+
+We will learn more about tibbles and data.tables later in the course. 
+
+### Native R Binaries (`.RData`)
+
+There are two common formats for writing binaries containing native R objects:
+`.RData` and `.rds`.
+
+To save one or more R objects to a file, use `save()`.
+
+```{r, 31}
+df = lme4::InstEval
+df_desc = 'The lme4::InstEval data.'
+save(df, df_desc, file = '../../data/InstEval.RData')
+```
+
+To restore these objects to the global environment use `load()`.
+
+```{r, 32}
+rm( list = ls() )
+ls()
+load('../../data/InstEval.RData')
+ls()
+```
+
+The function `load()` returns the names of objects returned invisibly meaning 
+you can assign them as shown below. 
+
+```{r, 33}
+foo = load('../../data/InstEval.RData')
+foo
+
+# The following construction assigns the InstEval data to a new object .
+# Useful when you don't know what the first object of foo is going to be.
+assign('InstEval', get(foo[1]) )
+```
+
+### Serialized R Data (`.rds`)
+
+Generally, it is best to use `save()` and `load()` for R objects.  However,
+there are times when it can be helpful to save the *data* an R object contains 
+without also saving its name.  In these cases, you can use 
+`saveRDS()` and `readRDS()`.
+
+```{r, 34}
+saveRDS(lme4::InstEval, file = '../../data/InstEval.rds')
+df = readRDS('../../data/InstEval.rds')
+```
+
+#### ![](../../icons/code_style.png){width='25px'} *Style notes*
+
+You may come across the extensions `.Rdata` or `.rda` from time to time. These
+are generally synonyms for `.RData` and can usually be loaded using `load()`. 
+However, the standard is to use `.RData`. 
+This should be considered course style. 
+
+### Other formats
+
+You may find the following packages useful for reading and writing data from
+other formats:
+
+  - `readxl` for reading Excel files
+  - `haven` for reading other common data formats
+  - `foreign` an alternative to `haven` that supports additional formats
+  - `rio` has been recommend to me by previous students. 
+
