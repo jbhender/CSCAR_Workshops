@@ -47,7 +47,10 @@ For part 1, I'd suggest reading:
 
 The notes for this week can be found at
 [R Short Course, Part 1](https://jbhender.github.io/workshops/rsc/R_Short_Course_Part1.html). The links below point to specific sections
-of these ntoes. 
+of these notes.
+
+You can use the links below to download the example scripts used in the videos.
+These can also be found [here](https://github.com/jbhender/CSCAR_Workshops/tree/main/rsc/examples/part1). 
 
 The video recordings are also collected in a playlist
 [R Short Course: Part 1](https://youtube.com/playlist?list=PLa-LAe1K0RROENlYTphgqPyko29cTk3e4). 

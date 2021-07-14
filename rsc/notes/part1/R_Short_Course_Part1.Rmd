@@ -46,6 +46,12 @@ streamline your work flow.
 
 ## R Basics {#basics}
 
+A video discussing this section of the notes is available at
+https://youtu.be/izjtF3DcVZg.
+
+Please note that you must be logged into your @umich.edu Gmail account to
+access the videos.  
+
 ###  ![](../../icons/Observe.png){width='25px'} Objects 
 
 Nearly everything in **R** is an object that can be referred to by name. 
@@ -141,6 +147,9 @@ assigning specific values to them.
 
 ## Global Environment {#global_environment}
 
+A video discussing this section of the notes is available at:
+https://youtu.be/RyrNQ4sjDUg.
+
 An environment is a context in which the names we use to refer to **R** 
 objects have meaning.  For now, it is sufficient to know that the default
 environment where objects are assigned is called the **global environment**.
@@ -192,6 +201,10 @@ obj_name
 ```
 
 ## ![](../../icons/Observe.png){width='25px'} Arithmetic operations {#arithmetic}
+
+A video discussing this section of the notes can be found at:
+https://youtu.be/mZup0mEK8X8
+
 **R** can do arithmetic with objects that contain numeric types.
 
 ```{r, 7b}
@@ -292,6 +305,9 @@ z = floor( e1 / e0 )
 
 ## ![](../../icons/Observe.png){width='25px'}  The **R** package system {#packages}
 
+A video discussing this section of the notes can be found at:
+https://youtu.be/MuFKwpguDEs.
+
 Much of the utility of **R** is derived from an extensive collection of user
 and domain-expert contributed packages. Packages are simply a standardized way
 for people to share *documented* code and data. There are thousands of packages,
@@ -364,17 +380,18 @@ search()
 ```
 #### ![](../../icons/Laptop.png){width='25px'} Exercises
 
-1. Find the default location for R packages on:
-   - your personal computer
-   - the *scs* servers
+1. Find the default location for R packages on your personal computer.
 
 2. Install the following R packages (at home): 
   - [tidyverse](https://www.tidyverse.org/): a collection of packages developed
-  by Hadley Wickham and others 
+    by Hadley Wickham and others 
   - [data.table](https://github.com/Rdatatable/data.table/wiki): we will use 
-  this later in the course and briefly below
+    this briefly below. 
 
 ## ![](../../icons/Observe.png){width='25px'} Input and output {#io}
+
+A video discussing this section of the notes can be found at:
+https://youtu.be/iRr1gMXMrTM.
 
 **R** is primarily and *in-memory* language, meaning it is designed to work with
 objects stored in working memory (i.e. *RAM*) rather than on disk. 
