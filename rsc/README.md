@@ -25,7 +25,7 @@ In week 1, we’ll discuss the following topics:
 
 In addition to the notes linked below under *Workshop Content*, I'd recommend
 reading the following chapters from Hadley Wickham's
-[R for Data Science]((https://r4ds.had.co.nz/):
+[R for Data Science](https://r4ds.had.co.nz/):
   + [Introduction](https://r4ds.had.co.nz/introduction.html)
   + [Workflow: basics](https://r4ds.had.co.nz/workflow-basics.html)
   + [Workflow: scripts](https://r4ds.had.co.nz/workflow-scripts.html)
@@ -46,33 +46,33 @@ For part 1, I'd suggest reading:
 ### Workshop content
 
 The notes for this week can be found at
-[R Short Course, Part 1](). The links below point to specific sections
+[R Short Course, Part 1](https://jbhender.github.io/workshops/rsc/R_Short_Course_Part1.html). The links below point to specific sections
 of these ntoes. 
 
 The video recordings are also collected in a playlist
-[R Short Course: Part 1](). 
+[R Short Course: Part 1](https://youtube.com/playlist?list=PLa-LAe1K0RROENlYTphgqPyko29cTk3e4). 
 
 + Creation and Naming of Objects:  
-   - [Notes]
-   - [Example Script]
-   - [Video Lecture]
+   - [Notes](https://jbhender.github.io/workshops/rsc/R_Short_Course_Part1.html#basics)
+   - Example Script: [R_basics.R](./examples/part1/R_basics.R)
+   - [Video Lecture](https://youtu.be/izjtF3DcVZg)
 
 + R's Global Environment:  
-   - [Notes]
-   - [Example Script]
-   - [Video Lecture]
+   - [Notes](https://jbhender.github.io/workshops/rsc/R_Short_Course_Part1.html#global_environment)
+   - Example Script: [R_basics.R](./examples/part1/R_basics.R)
+   - [Video Lecture](https://youtu.be/RyrNQ4sjDUg)
 
 + Arithmetic Operations:  
-   - [Notes]
-   - [Example Script]
-   - [Video Lecture]
+   - [Notes](https://jbhender.github.io/workshops/rsc/R_Short_Course_Part1.html#arithmetic)
+   - Example Script: [R_arithmetic.R](./examples/part1/R_arithmetic.R)
+   - [Video Lecture](https://youtu.be/mZup0mEK8X8)
 
 + R's Package System:  
-   - [Notes]
-   - [Example Script]
-   - [Video Lecture]
+   - [Notes](https://jbhender.github.io/workshops/rsc/R_Short_Course_Part1.html#paackages)
+   - Example Script: [R_packages.R](./examples/part1/R_packages.R)
+   - [Video Lecture](https://youtu.be/MuFKwpguDEs)
 
 + Reading and Writing Data:
-   - [Notes]
-   - [Example Script]
-   - [Video Lecture]
+   - [Notes](https://jbhender.github.io/workshops/rsc/R_Short_Course_Part1.html#io)
+   - Example Script: [R_IO.R](./examples/part1/R_IO.R)
+   - [Video Lecture](https://youtu.be/iRr1gMXMrTM)
