@@ -82,7 +82,7 @@ The video recordings are also collected in a playlist
 + Reading and Writing Data:
    - [Notes](https://jbhender.github.io/workshops/rsc/R_Short_Course_Part1.html#io)
    - Example Script: [R_IO.R](./examples/part1/R_IO.R)
-   - [Video Lecture](https://youtu.be/iRr1gMXMrTM)
+   - [Video Lecture](https://youtu.be/6et6TabZQf8)
      + The sections "reading and writing data with tidyverse" [5:52-8:06] and
        "reading and writing data with data.table" [8:06-9:35] can be skipped if desired.
      + The sections "serialized R data" [13:41-15:48] and
