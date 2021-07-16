@@ -46,8 +46,8 @@ For part 1, I'd suggest reading:
 ### Workshop content
 
 The notes for this week can be found at
-[R Short Course, Part 1](https://jbhender.github.io/workshops/rsc/R_Short_Course_Part1.html). The links below point to specific sections
-of these notes.
+[R Short Course, Part 1](https://jbhender.github.io/workshops/rsc/R_Short_Course_Part1.html).
+The links below point to specific sections of these notes.
 
 You can use the links below to download the example scripts used in the videos.
 These can also be found [here](https://github.com/jbhender/CSCAR_Workshops/tree/main/rsc/examples/part1). 
@@ -59,11 +59,15 @@ The video recordings are also collected in a playlist
    - [Notes](https://jbhender.github.io/workshops/rsc/R_Short_Course_Part1.html#basics)
    - Example Script: [R_basics.R](./examples/part1/R_basics.R)
    - [Video Lecture](https://youtu.be/izjtF3DcVZg)
+     + The section "Value vs Reference" [9:36-12:35] is not essential material for
+       new programmers. 
 
 + R's Global Environment:  
    - [Notes](https://jbhender.github.io/workshops/rsc/R_Short_Course_Part1.html#global_environment)
    - Example Script: [R_basics.R](./examples/part1/R_basics.R)
    - [Video Lecture](https://youtu.be/RyrNQ4sjDUg)
+     + The section "programmatic assignment" [6:01-16:17] is not essential to get the most
+       out of the remainder of the course. 
 
 + Arithmetic Operations:  
    - [Notes](https://jbhender.github.io/workshops/rsc/R_Short_Course_Part1.html#arithmetic)
@@ -79,3 +83,9 @@ The video recordings are also collected in a playlist
    - [Notes](https://jbhender.github.io/workshops/rsc/R_Short_Course_Part1.html#io)
    - Example Script: [R_IO.R](./examples/part1/R_IO.R)
    - [Video Lecture](https://youtu.be/iRr1gMXMrTM)
+     + The sections "reading and writing data with tidyverse" [5:52-8:06] and
+       "reading and writing data with data.table" [8:06-9:35] can be skipped if desired.
+     + The sections "serialized R data" [13:41-15:48] and
+       "reading data from other software" [15:48-17:50] are not essential to the remainder
+       of the short course.
+
