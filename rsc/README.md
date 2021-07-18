@@ -89,3 +89,8 @@ The video recordings are also collected in a playlist
        "reading data from other software" [15:48-17:50] are not essential to the remainder
        of the short course.
 
+## Part 2
+
++ Vector Indexing
+  - [Example Script](./examples/part2/R_vector_indexing.R)
+  - [Video Lecture](https://youtu.be/sWsVAVjJzLE)
