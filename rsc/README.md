@@ -12,9 +12,9 @@ Pre-recorded video discussions are distributed via YouTube.  These videos are
 only available to the University of Michigan community, meaning you need to be
 logged into your @umich.edu email address in the browswer you are viewing them in.
 
-## Week 1 - Getting Started
+## Part 1 - Getting Started
 
-In week 1, we’ll discuss the following topics:  
+In part 1, we’ll discuss the following topics:  
   + creation and naming of objects,
   + R’s global environment,
   + arithmetic operations,
@@ -53,7 +53,7 @@ You can use the links below to download the example scripts used in the videos.
 These can also be found [here](https://github.com/jbhender/CSCAR_Workshops/tree/main/rsc/examples/part1). 
 
 The video recordings are also collected in a playlist
-[R Short Course: Part 1](https://youtube.com/playlist?list=PLa-LAe1K0RROENlYTphgqPyko29cTk3e4). 
+[R Short Course, Part 1](https://youtube.com/playlist?list=PLa-LAe1K0RROENlYTphgqPyko29cTk3e4). 
 
 + Creation and Naming of Objects:  
    - [Notes](https://jbhender.github.io/workshops/rsc/R_Short_Course_Part1.html#basics)
@@ -91,6 +91,54 @@ The video recordings are also collected in a playlist
 
 ## Part 2
 
+In part 2, we’ll discuss the following topics:
+  + vectors, including atomic vectors, types, and lists,
+  + vector indexing,
+  + data frames and indexing,
+  + data frame methods incluidng subset, aggregate, reshape, and merge. 
+
+### Recommended reading
+
+In addition to the notes linked below under *Workshop Content*, I'd recommend
+reading the following chapters from Hadley Wickham's
+[R for Data Science](https://r4ds.had.co.nz/):
+  + [Vectors](https://r4ds.had.co.nz/vectors.html), Note that "tibbles" are
+    a tidyverse extension of the data.frame class with their own methods. 
+
+You may also find these chapters from Garrett Grolemund's
+[Hands on Programming with R](https://rstudio-education.github.io/hopr/)
+helpful:
+  + Part 2, Chapters 4-7.
+
+### Workshop content
+
+The notes for this week can be found at
+[R Short Course, Part 2](https://jbhender.github.io/workshops/rsc/R_Short_Course_Part2.html).
+The links below point to specific sections of these notes.
+
+You can use the links below to download the example scripts used in the videos.
+These can also be found [here](https://github.com/jbhender/CSCAR_Workshops/tree/main/rsc/examples/part2).
+
+The video recordings are also collected in a playlist
+[R Short Course: Part 2](https://www.youtube.com/watch?v=LHvPh_6Gds4&list=PLa-LAe1K0RRMzpaylBq2TppBPzwFC2_kl)
+
++ Vectors
+  - [Notes](https://jbhender.github.io/workshops/rsc/R_Short_Course_Part2.html#)
+  - Example Script: [R_vectors.R]
+  - [Video Lecture](https://youtu.be/LHvPh_6Gds4)
+  
 + Vector Indexing
-  - [Example Script](./examples/part2/R_vector_indexing.R)
+  - This content is not included in the notes. 
+  - Example Script: [R_vector_indexing.R](./examples/part2/R_vector_indexing.R)
   - [Video Lecture](https://youtu.be/sWsVAVjJzLE)
+
++ Data Frames
+  - [Notes](https://jbhender.github.io/workshops/rsc/R_Short_Course_Part2.html#)
+  - Example Script: [R_data.frame.R](./examples/part2/R_data.frame.R)
+  - [Video Lecture](https://youtu.be/ttwFPRCZgE0)
+
++ RECS case study
+  - [Notes](https://jbhender.github.io/workshops/rsc/R_Short_Course_Part2.html#)
+  - [Example Script]()
+  - [Video Lecture]()
+
