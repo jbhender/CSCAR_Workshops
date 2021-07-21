@@ -12,9 +12,13 @@ Pre-recorded video discussions are distributed via YouTube.  These videos are
 only available to the University of Michigan community, meaning you need to be
 logged into your @umich.edu email address in the browswer you are viewing them in.
 
+## Links to Exercises
+
++ [Part 1](./exercises/part1/)
+
 ## Week 1 - Getting Started
 
-In week 1, we’ll discuss the following topics:  
+In part 1, we’ll discuss the following topics:  
   + creation and naming of objects,
   + R’s global environment,
   + arithmetic operations,
