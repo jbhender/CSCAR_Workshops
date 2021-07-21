@@ -13,6 +13,7 @@ Dates in italics refer to the most recent presentation.
 
 [R Short Course](./rsc/)
   - Part 1, *Thursday July 22, 2-3:30pm*
+  - Part 2, *Thursday July 29, 2-3:30pm*
 
 ### R by Example (Series)
 
@@ -27,6 +28,8 @@ Dates in italics refer to the most recent presentation.
 [Analyzing RECS using Tidyverse](./R_by_Example/recs_dplyr/) *January 30, 2020*
 
 ### Other R Topics
+
+[Machine Learning in R](./ML_in_R/) *March 19, 2020*
 
 [Rcpp: Integrating C++ into R](./rcpp/) *November 22, 2019*
 
