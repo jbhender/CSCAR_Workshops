@@ -110,6 +110,11 @@ You may also find these chapters from Garrett Grolemund's
 helpful:
   + Part 2, Chapters 4-7.
 
+For those interested, a more advanced treatement of this material 
+can be found in  Hadley Wickham's [Advanced R](https://adv-r.hadley.nz):  
+   - [Vectors](https://adv-r.hadley.nz/vectors-chap.html)
+   - [Subsetting](https://adv-r.hadley.nz/subsetting.html).
+
 ### Workshop content
 
 The notes for this week can be found at
@@ -123,22 +128,23 @@ The video recordings are also collected in a playlist
 [R Short Course: Part 2](https://www.youtube.com/watch?v=LHvPh_6Gds4&list=PLa-LAe1K0RRMzpaylBq2TppBPzwFC2_kl)
 
 + Vectors
-  - [Notes](https://jbhender.github.io/workshops/rsc/R_Short_Course_Part2.html#)
+  - [Notes](https://jbhender.github.io/workshops/rsc/R_Short_Course_Part2.html#vectors)
   - Example Script: [R_vectors.R]
   - [Video Lecture](https://youtu.be/LHvPh_6Gds4)
   
 + Vector Indexing
-  - This content is not included in the notes. 
+  - [Notes](https://jbhender.github.io/workshops/rsc/R_Short_Course_Part2.html#index)
   - Example Script: [R_vector_indexing.R](./examples/part2/R_vector_indexing.R)
   - [Video Lecture](https://youtu.be/sWsVAVjJzLE)
 
 + Data Frames
-  - [Notes](https://jbhender.github.io/workshops/rsc/R_Short_Course_Part2.html#)
+  - [Notes](https://jbhender.github.io/workshops/rsc/R_Short_Course_Part2.html#data.frame)
   - Example Script: [R_data.frame.R](./examples/part2/R_data.frame.R)
   - [Video Lecture](https://youtu.be/ttwFPRCZgE0)
 
 + RECS case study
-  - [Notes](https://jbhender.github.io/workshops/rsc/R_Short_Course_Part2.html#)
-  - [Example Script]()
-  - [Video Lecture]()
+  - [Notes](https://jbhender.github.io/workshops/rsc/R_Short_Course_Part2.html#recs)
+  - Example Script: [RECS Case Study](./examples/part2/recs_case_study.R)
+  - [Video Lecture](https://youtu.be/G2xf82iHdIM).
+
 

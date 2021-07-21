@@ -1,0 +1,415 @@
+---
+title: "R Short Course: Part 2"
+author: "<a href='https://github.com/jbhender/CSCAR_Workshops/tree/main/rsc/'>R Short Course</a>"
+date: ""
+output: 
+  html_document:
+    toc: true
+    toc_depth: 4
+    theme: journal
+    highlight: pygments
+    css: ../../styles.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(prompt = FALSE)
+knitr::opts_chunk$set(highlight = TRUE)
+```
+
+## ![](../../icons/Observe.png){width='25px'} Vectors {#vectors}
+
+A recorded discussion of this material can be found 
+[here](https://youtu.be/LHvPh_6Gds4). 
+
+The material in this section is largely based on the recommended readings:  
+
+   - *R for Data Science*, [Chapter 20](http://r4ds.had.co.nz/vectors.html)
+   - *Advanced R*, [Vectors](https://adv-r.hadley.nz/vectors-chap.html)
+     and [Subsetting](https://adv-r.hadley.nz/subsetting.html).
+
+Vectors are the basic building blocks of many R data structures including
+rectangular data structures or *data.frames* most commonly used for analysis. 
+
+There are two kinds of vectors: *atomic vectors* and *lists* (aka
+*recursive vectors*). Every vector has
+two defining properties aside from the values it holds:
+
+  - A *type* (or *mode*) referring to what type of data it holds, and 
+  - A *length* referring to the number of elements comprising it.
+
+Use `typeof()` to determine a vector's type and 
+`length()` to determine its length.
+
+In **R**, *scalars* are just vectors with length one. 
+   
+### Atomic Vectors
+
+The elements in atomic vectors must all be of the same *type*.  
+Here are the most important types: 
+
+  - Logical: `TRUE`, `FALSE`
+  - Integer: `1L`
+  - Double: `2.4`
+  - Character: `"some words"`
+
+Two less commonly used types are *raw* and *complex*. The *mode* of a vector of
+integers or doubles is *numeric*, the *mode* of other types is the same as the
+type.
+
+To create new vectors without assigning values to them use `c()` or 
+`vector(mode, length)`. 
+
+```{r, 35_vector}
+cvec = c()
+cvec
+length(cvec)
+typeof(cvec)
+
+vvec = vector('character', length = 4)
+length(vvec)
+typeof(vvec)
+vvec
+```
+
+When the required length can be determined in advance, the latter 
+construction is preferred -- especially for long vectors.
+This is because it pre-allocates the entire vector which avoids
+inefficient repeat copying owing to R's *copy on modify* semantics. 
+
+
+### Attributes
+
+Attributes are metadata associated with a vector.  
+
+Some of the most important and commonly used attributes are:
+
+  - names
+  - class
+  - dim
+
+Each of these can be accessed and set using functions of the same name. 
+
+#### Names
+
+There are a few ways to create a vector with names.
+
+```{r, 36_names}
+## Ex1: assign with names()
+x = 1:3
+names(x) = c('Uno', 'Dos', 'Tres')
+x
+
+##Ex2: quoted names
+x = c( 'Uno' = 1, 'Dos' = 2, 'Tres' = 3 )
+x
+
+##Ex3: bare names
+x = c( Uno = 1, Dos = 2, Tres = 3)
+x
+
+##Ex4: 
+names(x)
+```
+
+#### class
+
+The *class* of an object plays an important role in R's *S3* object oriented
+system and determines how an object is treated by various functions.
+
+The class of a vector is generally the same as its *mode* or *type*.
+
+```{r, 37_class}
+class(FALSE); class(0L); class(1); class('Two'); class( list() )
+```
+
+Note the difference after we change the *class* of *x*.  
+```{r, 38_class}
+x
+class(x) = 'character'
+print(x)
+```
+
+It is generally better to use explicit conversion functions such as 
+`as.character()` to change an object's class as simply modifying the class
+attribute, as in the previous example, will not guarantee the object is a 
+valid member of that class. 
+
+#### dim
+
+We use `dim()` to access or set the *dimensions* of an object.  
+Two special classes where dimensions matter are *array* (including *matrix*),
+and *data.frame*. 
+
+Matrices are 2-dimension arrays. There was a distinct matrix class prior to 
+recent version of **R**, but the matrix class now inherits from the array class 
+-- meaning every matrix is also an array. 
+
+Both matrices and arrays are really just long vectors with a *dim* attribute. 
+
+```{r, 39_dim}
+# Matrix class
+x = matrix(1:10, nrow = 5, ncol = 2)
+dim(x)
+class(x)
+dim(x) = c(2, 5)
+x
+```
+The above demonstrates that **R** matrices are stored in *column-major order*.  
+The matrix class is the two-dimensional special cases of the array class.
+
+```{r, 40_dim}
+dim(x) = c(5, 1, 2)
+class(x)
+x
+
+dim(x) = c(5, 2, 1)
+x
+class(x)
+```
+
+#### Arbitrary attributes
+
+See a list of all attributes associated with a vector using `attributes()`. 
+Access and assign specific attributes using `attr()`.
+
+```{r, 51_attr}
+# Assign an a new attribute color
+attr(x, 'color') = 'green'
+attributes(x)
+class( attributes(x) )
+
+# Access or assign specific attributes
+attr(x, 'dim')
+attr(x, 'dim') = c(5, 2)
+class(x)
+x
+
+# Assign NULL to remove attributes
+attr(x, 'color') = NULL
+attributes(x)
+```
+
+## ![](../../icons/Observe.png){width='25px'} Vector Indexing {#index}
+
+A recorded discussion of this material can be found 
+[here](https://youtu.be/sWsVAVjJzLE). 
+
+Access elements of an atomic vector `x` using square brackets `x[]`.
+There are three types of indexing used within square brackets for 
+atomic vectors: indexing by position, indexing by name, and logical indexing. 
+
+Below are examples of positional indexing, in which we request elements from 
+on or more specific positions. 
+
+```{r pos_index}
+# create a vector
+x = 2 * (1:10)
+
+# extract a single element
+x[7]
+x[1]
+
+# extract multiple elements
+x[c(1, 10)]
+
+# extract a range of elements
+x[5:10]
+x[seq(5, 10, 1)]
+```
+
+When the names attribute of a vector is not `NULL`, the vector can be indexed
+by name.
+
+```{r name_index}
+code = 1:27
+names(code) = c(LETTERS, ' ') # built in vector of A-Z
+code[c('O', 'P', 'E', 'N', ' ', 'S', 'O', 'U', 'R', 'C', 'E')]
+```
+
+Except when looping over an entire vector, it is generally safer to index by 
+name than position in the sense that you're less likely to introduce a hard to
+identify bug when using names. 
+
+Finally, a vector can also be subset using a logical vector of the same length
+as the vector itself.  In this case, the positions in the logical vector 
+containing `TRUE` are returned.  This is most useful when the logical vector
+is constructed using Boolean operations on the vector itself, as in the third
+line of the example below. 
+
+```{r logical_index}
+y = c('pi' = pi, 'e' = exp(1), 'phi' = (1 + sqrt(5)) / 2 )
+y[c(TRUE, FALSE, TRUE)]
+y[y > 2]
+```
+
+You can read more about various ways to subset a vector in section [20.4.5](http://r4ds.had.co.nz/vectors.html#vector-subsetting) of
+*R for Data Science*. 
+
+### Lists
+
+*Lists* provide a more flexible data structure which can hold elements
+of multiple types, including other vectors. This can be useful for bringing
+together multiple object types into a single place. 
+
+Lists are the most flexible object structure commonly used by beginner or
+intermediate R users. Lists are also the basis for many of R's S3 classes
+including the `data.frame` class and model objects like those returend by 
+`lm()`. 
+
+To construct a list with specific objects, use the constructor `list()`. 
+An empty list of a specific length can also be constructed using `vector()`, 
+e.g.`vector(mode = 'list', length = 10)`.  It's almost always best to name
+the elements of a list, though it's not strictly required. 
+
+Here we construct a list containing two length one character vectors `hello` 
+and `catchphrase` and one length three character vector `goodbyes`. 
+
+```{r list_create}
+messages = list(
+  hello = 'Hello World!',
+  catchphrase = 'Cowabunga, dude.',
+  goodbyes = c('Hasta la vista, baby.', 'So long.', 'Later gator.')
+)
+```
+
+We can create a new list from the elements of an existing list using single
+square brackets `[]`. This can be done by position or name, with the latter
+generally preferred. 
+
+```{r list_pos}
+# selecting a sub-list by position
+messages[1:2]
+messages[1]
+messages[c(1, 3)]
+
+# selecting a sub-list by name 
+messages['goodbyes']
+messages[c('catchphrase', 'goodbyes')]
+```
+
+We can also select a specific element from a list using double square brackets
+`[[]]` (preferred) or the `$` operator as in the examples below.
+
+```{r list_element}
+# selecting a single element by position
+messages[[2]]
+
+# selecting a single element by name
+messages$hello
+messages[['hello']]
+```
+
+Note that the objects returned are the elements themselves 
+(in this case the `hello` character vector) and not a list with one element.  
+This distinction between `[]` and `[[]]` when used to subset a list often
+trips up those new to R. 
+
+When we want to work with the elements of a list or list-like object, an
+alternative to indexing is the `with()` function.  The `with()` function
+creates an environment in which we can execute expressions (R code) while
+referring to elements of a list using their bare (unquoted) names. This
+environment is nested with the global environment, so, while the list takes
+precedence, we can mix list elements with global objects.
+
+In the example below, we use `with()` to avoid repeated indexing of the
+`messages` list created above while constructing a message to write to the 
+console with the function `cat()`. 
+
+```{r with}
+# globals
+hello = 'Hi!'
+hi = 'hi'
+
+# what we might do w/o with()
+cat(
+  messages[['hello']], 
+  '\n\n',
+  messages[['catchphrase']], 
+  '\n\n',
+  messages[['goodbyes']][3], 
+  '\n',
+  sep = ''
+)
+
+# using with
+with(messages,
+     cat(hello, '\n\n', catchphrase, '\n\n', goodbyes[3], '\n', sep = '')
+)
+```
+
+You can read more about list indexing in section 20.5 of *R for Data Science* [here](http://r4ds.had.co.nz/vectors.html#important-types-of-atomic-vector).
+
+## ![](../../icons/Observe.png){width='25px'} The *data.frame* class {#data.frame}
+
+A recorded discussion of this material can be found 
+[here](https://youtu.be/ttwFPRCZgE0). 
+
+The *data.frame* class in **R** is a *list* whose elements (columns) all have
+the same length.  A *data.frame* has attributes *names* with elements of the 
+list constituting its columns, *row.names* with values uniquely identifying 
+each row, and also has *class* *data.frame*. 
+
+Construct a new *data.frame* using `data.frame()`.  Here is an example. 
+
+```{r, 52_df}
+df = 
+  data.frame( 
+    ID = 1:10,
+    Group = sample(0:1, 10, replace = TRUE),
+    Var1 = rnorm(10),
+    Var2 = seq(0, 1, length.out = 10),
+    Var3 = rep(c('a', 'b'), each = 5)
+  )
+
+names(df)
+dim(df)
+length(df)
+nrow(df)
+class(df$Var3)
+```
+
+We can access the values of a data frame both like a list:
+```{r, 53_dfsubset}
+df$ID
+df[['Var3']]
+```
+
+or like an array:
+
+```{r, 54_df}
+df[1:5, ]
+df[, 'Var2']
+```
+
+This works because the subset operator `[` has behavior that depends on the
+class of the object being subset. 
+
+In terms of style, when selecting a single element the double bracket notation
+`df[['Var3']]` (returning an atomic vector) is preferred over an array-like
+subset notation `df[, 'Var3']` (also returning an atomic vector). Note that when
+selecting two or more columns, e.g. `df[, c('ID', 'Var3')]`, the object
+returned is a data.frame. To select a single column data.frame, use the 
+argument `drop = FALSE`, e.g. `df[, 'Var3', drop = FALSE]`.
+
+Those interested can read more about data frames in *Advanced R* 
+[here](http://adv-r.had.co.nz/Data-structures.html#data-frames).
+
+### ![](../../icons/Observe.png){width='25px'} Methods for the data.frame class {#recs}
+
+In the 
+[RECS Case Study](https://github.com/jbhender/CSCAR_Workshops/tree/main/rsc/examples/examples/part2/recs_case_study.R)
+([video](https://youtu.be/G2xf82iHdIM)) I provide an overview of some important
+methods for working with data.frames, including:  
+  + `subset()` - for selecting rows satisfying given conditions,
+  + `aggregate()` - for computing summary statistics, often by group,
+  + `merge()` - for joining two data.frames based on common rows,
+  + `reshape()` - for pivoting a data frame between longer and wider formats,
+  + `with()` - for constructing an environment in which to evaluate expressions
+  using bare column names,
+  + `within()` - like `with()`, but returning a copy of the entire environment
+  which is useful for adding multiple columns to an existing data.frame.
+  
+Popular alternatives to the functions above are the 
+[tidyverse](tidyerse.org) -- especially *dplyr* and *tidyr* -- and 
+[data.table](https://rdatatable.gitlab.io/data.table/) packages. 
