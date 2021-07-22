@@ -15,6 +15,11 @@
 + Exercise Set 3 (time permitting)
 + Wrap up [3:20-3:30]
 
+If we end early, consider playing a game of Master Mind to prepare you
+for the practicum.
+
+https://www.webgamesonline.com/mastermind/
+
 ### (Set 1) R Basics & Arithmetic
 
 For each snippet of **R** code below, compute the value of `z` without using
