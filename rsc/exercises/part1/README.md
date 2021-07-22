@@ -18,26 +18,30 @@
 ### (Set 1) R Basics & Arithmetic
 
 For each snippet of **R** code below, compute the value of `z` without using
-**R**.  Use **R** to check your work when done. 
-
-1.  What is the value of `z`?
+**R**.  Use **R** to check your work when done.  
 
 ```r
+# 1.  What is the value of `z`?
+
 x = 10
 y = c(9, 9)
 z = x
 z = y
 z = sum(z)
 ```
-2.  What is the value of `z`?
 
 ```r
+# 2.  What is the value of `z`?
+
 x = -1:1
 y = rep(1, 10)
 z = mean(x * y)
 ```
-3. Which do you think is larger `e0` or `e1`? Why? What is the value of `z`?
+
 ```r
+# 3. Which do you think is larger `e0` or `e1`? Why?
+#    What is the value of `z`?
+
 x0 = 1:10000
 y0 = x0 * pi / max(x0)
 e0 = sum( abs( cos(y0)^2 + sin(y0)^2 - 1 ) )
@@ -59,17 +63,17 @@ wins after entering anything at all.
   + creates a list "messages" with elements:  
     - 'welcome' - a message welcoming a player to the game,
     - 'instructions' - A question along the lines of
-       "What am I thinking? Enter your response below."
+       "What am I thinking? Enter your response below.",
     - 'win' - A message to be printed when the player "wins" by
-       entering anyting at all.  
+       entering anything at all.  
   + saves that list as `game_messages.RData` in a
     folder dedicated to this workshop.
 
 5. Download the script [simple_game.R](./simple_game.R) and
    move it the folder you created in exercise 4. Modify the script
    in the locations indicated to:  
-   - load the list of messages you created in exercise 4
-   - write the welcome message from your list to the console
+   - load the list of messages you created in exercise 4,
+   - write the welcome message from your list to the console,
    - write the "win" message to the console.
 
 ### (Set 3) Installing R Packages
