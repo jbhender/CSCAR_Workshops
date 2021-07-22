@@ -40,7 +40,7 @@ z = mean(x * y)
 
 3. Which do you think is larger `e0` or `e1`? Why? What is the value of `z`?
 
-```{r, 11}
+```r
 x0 = 1:10000
 y0 = x0 * pi / max(x0)
 e0 = sum( abs( cos(y0)^2 + sin(y0)^2 - 1 ) )
@@ -59,12 +59,12 @@ this exercise we will write a trivial game in which the player always
 wins after entering anything at all.  
 
 4. Write an R script that does the following:  
-  + creates a list "messages" with elements
-    - 'welcome' - a message welcoming a player to the 'Matermind Game'
+  + creates a list "messages" with elements:  
+    - 'welcome' - a message welcoming a player to the game,
     - 'instructions' - A question along the lines of
        "What am I thinking? Enter your response below."
     - 'win' - A message to be printed when the player "wins" by
-       entering anyting at all. 
+       entering anyting at all.  
   + saves that list as `game_messages.RData` in a
     folder dedicated to this workshop.
 
