@@ -29,7 +29,6 @@ z = x
 z = y
 z = sum(z)
 ```
-
 2.  What is the value of `z`?
 
 ```r
@@ -37,9 +36,7 @@ x = -1:1
 y = rep(1, 10)
 z = mean(x * y)
 ```
-
 3. Which do you think is larger `e0` or `e1`? Why? What is the value of `z`?
-
 ```r
 x0 = 1:10000
 y0 = x0 * pi / max(x0)
@@ -52,7 +49,7 @@ e1 = sum( abs( cos(y1)^2 + sin(y1)^2 - 1 ) )
 z = floor( e1 / e0 )
 ```
 
-### Exercise Set 2
+### (Set 2) A simple game
 
 This set of exercises is preparatory for the practicum in part 5. In
 this exercise we will write a trivial game in which the player always
@@ -75,7 +72,7 @@ wins after entering anything at all.
    - write the welcome message from your list to the console
    - write the "win" message to the console.
 
-### Exercise Set 3
+### (Set 3) Installing R Packages
 
 This set of exercises is focused on working with packages.
 We will do these exercises only if the previous parts finish early. 
