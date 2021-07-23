@@ -73,6 +73,7 @@ wins after entering anything at all.
        entering anything at all.  
   + saves that list as `game_messages.RData` in a
     folder dedicated to this workshop.
+  + Example solution: [gg_messages.R](./gg_messages.R)
 
 5. Download the script [simple_game.R](./simple_game.R) and
    move it the folder you created in exercise 4. Modify the script
@@ -80,6 +81,7 @@ wins after entering anything at all.
    - load the list of messages you created in exercise 4,
    - write the welcome message from your list to the console,
    - write the "win" message to the console.
+   - Example solution: [guessing_game.R](./guessing_game.R)
 
 ### (Set 3) Installing R Packages
 
