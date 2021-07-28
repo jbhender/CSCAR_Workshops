@@ -18,7 +18,7 @@ Encapsulating repetitions in functions helps us write better programs by:
 
 ### Functions in R
 
-The basic pattern for defining an function is shown below.
+The basic pattern for defining a function is shown below.
 
 ```r
 my_func = function( arg1, arg2 = 5, arg3 = NULL) {
@@ -33,9 +33,10 @@ my_func = function( arg1, arg2 = 5, arg3 = NULL) {
 ```
 
 We use the `function` keyword along with 0 or more agruments.  Arguments can
-be given defaults. Optional arguments can default to NULL.  
+be given defaults. Optional arguments can default to `NULL`.  
 
-A good style rule is to always document a functions inputs and outputs:
+A good style rule is to always document a function's inputs and outputs
+after briefly describing what it does:
 
 
 ```r
@@ -77,7 +78,9 @@ from the codebook. The final product can be viewed [here](./RbyExample-fpd-examp
 
 ## Example 2
 
-In this example, we begin adapting the instruction [example](https://jbhender.github.io/CSCAR_Workshops/R_by_Example/recs_dplyr/RbyExample-recs_tidy-example.R) from the previous workshop to encapsulate the patterns of
+In this example, we begin adapting the instructor's
+[example](https://jbhender.github.io/CSCAR_Workshops/R_by_Example/recs_dplyr/RbyExample-recs_tidy-example.R)
+from the previous workshop to encapsulate the patterns of
 weighted sums by group and fix ideas. The final product can be viewed [here](./RbyExample-fpd-example2.R).
 
 ## Example 3
@@ -90,19 +93,24 @@ replicate weight pattern in the function `recs_mean_brr` which can be found in
 
 1. Start simple and don't be afraid to do some of the work outside of the function.
 
-1. Use the `_at` scoped variant of dplyr verbs, 
+1. (Deprecated) Use the `_at` scoped variant of dplyr verbs, 
    e.g. `summarize_at` or `mutate_at` to pass columns to operate on as
    character vectors. Use the "lambda function" formulation of `.funs` if you
    need to make use of auxillary variables (such as weights).
+   
+1. Use `across()` to pass columns to operate on as character vectors.
 
 1. Use `.data[!!var]` to access a specific variable using a character string.
 
-1. Use base R where needed, keeping in mind that tibbles/data.frames are lists.
+1. Use base R where needed, keeping in mind that tibbles are data.frames and
+   data.frames are lists.
 
 1. Use `!!new_var :=` to name a new variable using a length one character
-vector `new_var`.
+   vector `new_var`.
 
-1. Use "quosures" and quasi-quotations as a last resort, see `vignette('programming', package = 'dplyr')`. Personally, I avoid this outside the use of `.data[!!var]`.
+1. Use "quosures" and quasi-quotations as a last resort;
+   see `vignette('programming', package = 'dplyr')`.
+   Generally, I personally avoid this outside the use of `.data[!!var]`.
 
 
 

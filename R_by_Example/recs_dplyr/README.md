@@ -13,7 +13,10 @@ to build an analysis from scratch by adapting presented examples step by step.
 In the process, participants will become familiar with core dplyr functions, 
 pivoting using tidyr, and a basic ggplot2 example.
 
-This workshop is geared towards beginner to intermediate R users.
+This workshop is geared towards beginner to intermediate R users. If you can
+efficiently debug R syntax errors and generally follow the R help pages, this
+workshop is for you.  If you'd prefer detailed dicussion of functions used,
+see my (forthcoming) R skills series instead. 
 
 ## Motivating Questions
 
@@ -41,9 +44,10 @@ be used to compute standard errors for survey weighted estimates. This
 form of repetition is an opportunity to learn an important form of
 "vectorization" in R. Vectorization is a technique wherein we  organize 
 our R code to avoid explicit loops and instead rely on functions that
-implement these loops in a lower level machine language (e.g. C/C++). 
+implement these loops in a lower level language (e.g. C/C++). 
 
-The "microdata" at the household level can be found at this [link](https://www.eia.gov/consumption/residential/data/2015/index.php?view=microdata).
+The "microdata" at the household level can be found at this
+[link](https://www.eia.gov/consumption/residential/data/2015/index.php?view=microdata).
 
 We'll use the linked csv file.  We'll also take a look at the variable
 and response codebook (the XLS link).  There we'll review the following
@@ -61,7 +65,8 @@ key variables:
 ## Files
 
 The files for this workshop can be found at my
-[CSCAR_Workshops](https://github.com/jbhender/CSCAR_Workshops/tree/master/R_by_Example/recs_dplyr) repository on Github.
+[CSCAR_Workshops](https://github.com/jbhender/CSCAR_Workshops/tree/master/R_by_Example/recs_dplyr)
+repository on Github.
 
 Here is a list of files:
 
@@ -71,8 +76,10 @@ Here is a list of files:
  template R script to help you get started on the exercise.
  - [RbyExample-recs_tidy-solution-a.R](./RbyExample-recs_tidy-solution-a.R) -
  solution to participant exercise
- - [RbyExample-recs_tidy-solution-a-hints.html](./RbyExample-recs_tidy-solution-a-hints.html) - exercise instructions with buttons to reveal the solution step by step
- - [RbyExample-recs_tidy-solution-a-hints.R](./RbyExample-recs_tidy-solution-a-hints.R) - source code for the "hints" document above, written using spin. 
+ - [RbyExample-recs_tidy-solution-a-hints.html](./RbyExample-recs_tidy-solution-a-hints.html) -
+ exercise instructions with buttons to reveal the solution step by step
+ - [RbyExample-recs_tidy-solution-a-hints.R](./RbyExample-recs_tidy-solution-a-hints.R) -
+ source code for the "hints" document above, written using spin. 
  - [RbyExample-recs_tidy-solution-b.R](./RbyExample-recs_tidy-solution-b.R) - 
  solution to the second approach, suggested as a take-home exercise. 
  - [RbyExample-recs_tidy-solution.R](./RbyExample-recs_tidy-solution.R) - 
@@ -105,7 +112,7 @@ I'll demonstrate each of the steps above using the script
 temperatures in winter at home?
 
 There are two ways to approach the question above:
-  a. Estimate day and night temperatures for each group and compare visually
+  a. Estimate day and night temperatures for each group and compare visually.
   a. Estimates the difference between day and night temperatures by group.
 
 I've provided solutons to each of these as `RbyExample-recs_tidy-solution-a.R`
@@ -156,14 +163,14 @@ longer format:
   - DOEID (`id`)
   - BRRWT1-BRRWT96
 
-
 ### Step 4 - Point Estimates
 
 Steps 1-3 are the initial phase of almost every analysis. Now, you're ready to 
 begin the analytic tasks. These will tend to differ between analyses.
 
 In this analysis, the first step is to form point estimates of the average
-national day with someone home and night temperatures. Do that by forming
+national home temperatures in two situations: during the day with someone home and
+at night. We Do that by forming
 weighted (NWEIGHT/`weight`) means of these temperatures (TEMPHOME/`temp_home`,
 TEMNITE/`temp_night`) by group (EQUIPMUSE/`therm`). 
 
@@ -173,7 +180,9 @@ a longer format -- this is a good time to achieve that using `pivot_longer()`.
 ### Step 5 - Replicate Estimates
 
 Recall that this is survey data and not an identically distributed sample of US 
-households. As such, to estimate standard errors we will use the replicate
+households. This particular survey provides replicate weights as a means for
+users to estimate standard errors for quantities of interest. As such, to estimate
+standard errors we will use the replicate
 weights method in which we repeatedly recomptue the estimates from step 4, each
 time replacing NWEIGHT/`weight` with one of the 96 replicate weights.  To do
 this efficiently:
@@ -185,7 +194,7 @@ step 4.
 
 1. Next, re-compute point estimates for each set of replicate weights.  To do
 this, re-use the code from step 4 and add the identifier for the replicate weights
-to the `group_by` statement.
+to the `group_by()` statement.
 
 The result should have rows giving the weighted average temperature for each 
 unique combination of thermostat behavior, temperature type, and set 
@@ -197,17 +206,18 @@ Once we have the replicate estimates for our quantities of interest, we estimate
 the variance of the point estimates from step 4 using the sum of squared 
 deviations of the replicate estimates around the original point estimates, 
 scaling up by a factor determined in the process of formulating the replicate 
-weights. The standard error is the square root of this variance estimate.
+weights. This factor is called a *Fay coefficient* and, for this survey, is
+`epsilon = 0.5`. The standard error is the square root of this variance estimate.
 
 To accomplish this:
 
   1. Join the point estimates from step 4 with the replicate
-estimates from step 5.
+     estimates from step 5.
   1. Estimate the standard error for each point estimate, using the same grouping
-structure as used in step 4 to form the point estimates.
+     structure as used in step 4 to form the point estimates.
   1. Add columns `lwr` and `upr` for, respectively, the lower and upper 95% 
-confidence bounds using the point estimate +/- $\Phi^{-1}(.975)$ (or 1.96) 
-times the standard error.
+     confidence bounds using the point estimate +/- $\Phi^{-1}(.975)$ (or 1.96) 
+     times the standard error.
 
 ### Step 7 - Plot the results
 
