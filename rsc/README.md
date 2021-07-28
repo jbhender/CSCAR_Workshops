@@ -18,7 +18,9 @@ logged into your @umich.edu email address in the browswer you are viewing them i
 
 ## Links to each part
 
-+ [Part 3](#part3)
++ [Part 1](#part=1-getting-started)
++ [Part 2](#part-3-vectors-and-data-frames)
++ [Part 3](#part-3--programming-tools)
 
 ---
 
