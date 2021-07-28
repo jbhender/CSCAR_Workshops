@@ -152,4 +152,71 @@ The video recordings are also collected in a playlist
   - Example Script: [RECS Case Study](./examples/part2/recs_case_study.R)
   - [Video Lecture](https://youtu.be/G2xf82iHdIM).
 
+---
 
+## Part 3
+
+In part 3, we’ll discuss the following programming tools:
+  + using and writing functions,
+  + function scope,
+  + logical vectors, 
+  + conditional execution,
+  + iteration. 
+
+### Recommended Reading
+
+The following chapters in *R for Data Science*  
+
+  + [Program Introduction](https://r4ds.had.co.nz/program-intro.html)
+  + [Functions](http://r4ds.had.co.nz/functions.html)
+  + [Iteration](https://r4ds.had.co.nz/iteration.html)
+ 
+From *Hands on Programming with R*:  
+
+  + Sections [2.3-2.5](https://rstudio-education.github.io/hopr/basics.html#functions)
+  + [Loops](https://rstudio-education.github.io/hopr/loops.html)
+
+From the [The tidyverse style guide](https://style.tidyverse.org/):  
+
+  + Section 2.3 
+    [Function Calls](https://style.tidyverse.org/syntax.html#function-calls), 
+  + Section 2.4, 
+    [Control Flow](https://style.tidyverse.org/syntax.html#control-flow)
+  + Chapter 3, [Functions](https://style.tidyverse.org/functions.html)
+
+For a more technical treatment, the following chapter from *Advanced R* is
+excellent.    
+
+  + [Functions](http://adv-r.had.co.nz/Functions.html).
+
+### Workshop content
+
+The notes for this week can be found at
+[R Short Course, Part 3](https://jbhender.github.io/workshops/rsc/R_Short_Course_Part3.html).
+The links below point to specific sections of these notes.
+
+You can use the links below to download the example scripts used in the videos.
+These can also be found [here](https://github.com/jbhender/CSCAR_Workshops/tree/main/rsc/examples/part3).
+
+The video recordings are also collected in a playlist
+[R Short Course, Part 3](https://www.youtube.com/watch?v=lVOGX_cbU7A&list=PLa-LAe1K0RRMz5r3LnHhtIzF0q4_JT-9Y)
+
++ Functions
+  - [Notes](https://jbhender.github.io/workshops/rsc/R_Short_Course_Part3.html#functions)
+  - Example Script: [R_functions.R](./examples/part3/R_functions.R)
+  - [Video Lecture](https://youtu.be/TUfrA1j5u9Q)
+  
++ Logical Vectors
+  - [Notes](https://jbhender.github.io/workshops/rsc/R_Short_Course_Part3.html#logical)
+  - Example Script: [R_logical.R](./examples/part3/R_logical.R)
+  - [Video Lecture](https://youtu.be/lVOGX_cbU7A)
+
++ Conditional Execution
+  - [Notes](https://jbhender.github.io/workshops/rsc/R_Short_Course_Part3.html#conditional)
+  - Example Script: [R_conditional.R](./R_conditional.R)
+  - [Video Lecture](https://youtu.be/UgqmODtxHgQ)
+
++ Iteration
+  - [Notes](https://jbhender.github.io/workshops/rsc/R_Short_Course_Part3.html#iteration)
+  - Example Script: [R_iteration.R](./R_itreation.R)
+  - [Video Lecture](https://youtu.be/SIVBorwkmsc)
