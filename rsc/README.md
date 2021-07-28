@@ -10,7 +10,10 @@ program a console version of the game “Mastermind”.
 
 Pre-recorded video discussions are distributed via YouTube.  These videos are
 only available to the University of Michigan community, meaning you need to be
-logged into your @umich.edu email address in the browswer you are viewing them in.
+logged into your @umich.edu Gmail account in the browswer you want
+to view them in. If you are logged into a personal Gmail, you may need to use
+the switch account feature so that your @umich.edu account is primary.  If all
+else fails, sign out of Gmail and sign back into mail.umich.edu first.  
 
 ## Links to Exercises
 
@@ -208,7 +211,7 @@ You can use the links below to download the example scripts used in the videos.
 These can also be found [here](https://github.com/jbhender/CSCAR_Workshops/tree/main/rsc/examples/part3).
 
 The video recordings are also collected in a playlist
-[R Short Course, Part 3](https://www.youtube.com/watch?v=lVOGX_cbU7A&list=PLa-LAe1K0RRMz5r3LnHhtIzF0q4_JT-9Y)
+[R Short Course, Part 3](https://www.youtube.com/watch?v=lVOGX_cbU7A&list=PLa-LAe1K0RRMz5r3LnHhtIzF0q4_JT-9Y).
 
 + Functions
   - [Notes](https://jbhender.github.io/workshops/rsc/R_Short_Course_Part3.html#functions)
