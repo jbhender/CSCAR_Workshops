@@ -18,9 +18,9 @@ logged into your @umich.edu email address in the browswer you are viewing them i
 
 ## Links to each part
 
-+ [Part 1](#part=1-getting-started)
-+ [Part 2](#part-3-vectors-and-data-frames)
-+ [Part 3](#part-3--programming-tools)
++ [Part 1](#part-1---getting-started)
++ [Part 2](#part-2---vectors-and-data-frames)
++ [Part 3](#part-3---programming-tools)
 
 ---
 
@@ -163,7 +163,7 @@ The video recordings are also collected in a playlist
 
 ---
 
-## [Part 3 -- Programming Tools](#part3)
+## Part 3 - Programming Tools
 
 In part 3, we’ll discuss the following programming tools:
   + using and writing functions,
