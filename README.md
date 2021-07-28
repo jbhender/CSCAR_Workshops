@@ -14,6 +14,8 @@ Dates in italics refer to the most recent presentation.
 [R Short Course](./rsc/)
   - Part 1, *Thursday July 22, 2-3:30pm*
   - Part 2, *Thursday July 29, 2-3:30pm*
+  - Part 3, *Thursday August 5, 2-3:30pm*
+  - Part 4, *Thursday August 12, 2-3:30pm*
 
 ### R by Example (Series)
 
