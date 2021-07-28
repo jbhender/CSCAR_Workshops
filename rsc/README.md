@@ -12,10 +12,15 @@ Pre-recorded video discussions are distributed via YouTube.  These videos are
 only available to the University of Michigan community, meaning you need to be
 logged into your @umich.edu email address in the browswer you are viewing them in.
 
-
 ## Links to Exercises
 
 + [Part 1](./exercises/part1/)
+
+## Links to each part
+
++ [Part 3](#part3)
+
+---
 
 ## Part 1 - Getting Started
 
@@ -94,7 +99,9 @@ The video recordings are also collected in a playlist
        "reading data from other software" [15:48-17:50] are not essential to the remainder
        of the short course.
 
-## Part 2
+---
+
+## Part 2 - Vectors and Data Frames
 
 In part 2, we’ll discuss the following topics:
   + vectors, including atomic vectors, types, and lists,
@@ -154,7 +161,7 @@ The video recordings are also collected in a playlist
 
 ---
 
-## Part 3
+## [Part 3 -- Programming Tools](#part3)
 
 In part 3, we’ll discuss the following programming tools:
   + using and writing functions,
