@@ -28,26 +28,34 @@ questions to discuss with your group.
    from least complex to most complex of the following types (listed alphabetically):
    character, double, integer, logical.
 
-2. Which of the following is not the same as the others?  
-   a. `df$a`
-   a. `df[1]`
-   a. `df[['a']]`
-   a. `df[, 1]`
+```
+2. Consider an arbitrary *data.frame* `df` with columns `a`, `b`, and `c`.
+   Which of the following is not the same as the others?  
+   a. df$a
+   b. df[1]
+   c. df[['a']]
+   d. df[, 1]
+```
 
-3. Which of the following are equivalent to `length(df)`? Choose all that apply.  
-   a. `nrow(df)`
-   a. `ncol(df)`
-   a. `3 * nrow(df)`
-   a. `length(df[['a']])`
-   a. `length(df[1:3])`
+```
+3. Consider an arbitrary *data.frame* `df` with columns `a`, `b`, and `c`.
+   Which of the following are equivalent to `length(df)`? Choose all that apply.  
+   a. nrow(df)
+   b. ncol(df)
+   c. 3 * nrow(df)
+   d. length(df[['a']])
+   e. length(df[1:3])
+```
 
-4. Which of the following are equivalent to `length(df$a)`? Choose all that apply.  
-   a. `nrow(df)`
-   a. `ncol(df)`
-   a. `3 * nrow(df)`
-   a. `length(df[['a']])`
-   a. `length(df[1:3])`
-
+```
+4. Consider an arbitrary *data.frame* `df` with columns `a`, `b`, and `c`.
+   Which of the following are equivalent to `length(df$a)`? Choose all that apply.  
+   a. nrow(df)
+   b. ncol(df)
+   c. 3 * nrow(df)
+   d. length(df[['a']])
+   e. length(df[1:3])
+```
 
 ## Exercise Set 2
 
