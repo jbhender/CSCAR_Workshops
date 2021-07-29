@@ -77,7 +77,7 @@ names(weights_long) = c('id', 'repl', 'brrwt')
 #length(brr_cols) * nrow(dt)
 
 ## merge temps with long format weight for group aggregation
-#dt_long = merge(dt_core, weights_long, by = 'id')
+dt_long = merge(dt_core, weights_long, by = 'id')
 #dim(dt_long)
 #nrow(dt_core) * length(brr_cols)
 #head(dt_long)
@@ -103,7 +103,6 @@ temp_repl = aggregate(
 ## compute dispersion of replicate estimates around original point estimate
 temp_repl = merge(temp_repl, temp_est, by = 'region')
 fay = 1 / (1 - 0.5)^2
-head(temp_repl)
 
 temp_var = aggregate( 
   cbind(
