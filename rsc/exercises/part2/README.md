@@ -8,7 +8,7 @@
   - Breakout [2:20-2:35]
   - Discussion [2:35-2:45]
 + Exercise Set 2
-  - Breakout a [2:45-3:15]
+  - Breakout [2:45-3:15]
   - Discussion [3:15-3:30]
 
 
@@ -105,4 +105,7 @@ for hints as we will follow the same general outline.
 14. Merge the variance and point estimates into a single data frame.
 15. Use `within()` to create lower and upper bounds for the 95% CI as 
     point estimate +/- z * se, where the standard error se is the square 
-    root of the variance from step 13 and z is given above. 
+    root of the variance from step 13 and z is given above.
+
+You can download an example solution here
+[rsc_part2_exercise_solution.R](./rsc_part2_exercise_solution.R).
