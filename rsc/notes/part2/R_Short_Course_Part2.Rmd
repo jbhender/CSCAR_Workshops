@@ -401,14 +401,15 @@ In the
 [RECS Case Study](https://github.com/jbhender/CSCAR_Workshops/tree/main/rsc/examples/examples/part2/recs_case_study.R)
 ([video](https://youtu.be/G2xf82iHdIM)) I provide an overview of some important
 methods for working with data.frames, including:  
-  + `subset()` - for selecting rows satisfying given conditions,
-  + `aggregate()` - for computing summary statistics, often by group,
-  + `merge()` - for joining two data.frames based on common rows,
-  + `reshape()` - for pivoting a data frame between longer and wider formats,
-  + `with()` - for constructing an environment in which to evaluate expressions
-  using bare column names,
-  + `within()` - like `with()`, but returning a copy of the entire environment
-  which is useful for adding multiple columns to an existing data.frame.
+
+   + `subset()` - for selecting rows satisfying given conditions,
+   + `aggregate()` - for computing summary statistics, often by group,
+   + `merge()` - for joining two data.frames based on common rows,
+   + `reshape()` - for pivoting a data frame between longer and wider formats,
+   + `with()` - for constructing an environment in which to evaluate expressions
+     using bare column names,
+   + `within()` - like `with()`, but returning a copy of the entire environment
+      which is useful for adding multiple columns to an existing data.frame.
   
 Popular alternatives to the functions above are the 
 [tidyverse](tidyerse.org) -- especially *dplyr* and *tidyr* -- and 
