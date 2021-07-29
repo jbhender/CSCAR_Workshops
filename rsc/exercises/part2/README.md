@@ -22,11 +22,13 @@ https://www.webgamesonline.com/mastermind/
 These exercises consist of several multiple choice
 questions to discuss with your group.
 
+```
 1. When you attempt to include values of multiple types in a single vector,
    values of less complex types are coerced to more complex types. This is
    known as *type promotion*. Experiment in R to determine the relative order
    from least complex to most complex of the following types (listed alphabetically):
    character, double, integer, logical.
+```
 
 ```
 2. Consider an arbitrary *data.frame* `df` with columns `a`, `b`, and `c`.
@@ -35,6 +37,7 @@ questions to discuss with your group.
    b. df[1]
    c. df[['a']]
    d. df[, 1]
+   e. df[, 'a']
 ```
 
 ```
