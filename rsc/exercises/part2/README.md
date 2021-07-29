@@ -22,26 +22,31 @@ https://www.webgamesonline.com/mastermind/
 These exercises consist of several multiple choice
 questions to discuss with your group.
 
-  1. Which of the following is not the same as the others?
+1. When you attempt to include values of multiple types in a single vector,
+   values of less complex types are coerced to more complex types. This is
+   known as *type promotion*. Experiment in R to determine the relative order
+   from least complex to most complex of the following types (listed alphabetically):
+   character, double, integer, logical.
+
+2. Which of the following is not the same as the others?  
    a. `df$a`
    a. `df[1]`
    a. `df[['a']]`
    a. `df[, 1]`
 
-  2. Which of the following are equivalent to `length(df)`? Choose all that apply.
+3. Which of the following are equivalent to `length(df)`? Choose all that apply.  
    a. `nrow(df)`
    a. `ncol(df)`
    a. `3 * nrow(df)`
    a. `length(df[['a']])`
    a. `length(df[1:3])`
 
-  3. Which of the following are equivalent to `length(df$a)`? Choose all that apply.
+4. Which of the following are equivalent to `length(df$a)`? Choose all that apply.  
    a. `nrow(df)`
    a. `ncol(df)`
    a. `3 * nrow(df)`
    a. `length(df[['a']])`
    a. `length(df[1:3])`
-
 
 
 ## Exercise Set 2

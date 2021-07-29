@@ -18,6 +18,7 @@ else fails, sign out of Gmail and sign back into mail.umich.edu first.
 ## Links to Exercises
 
 + [Part 1](./exercises/part1/)
++ [Part 2](./exercises/part2/)
 
 ## Links to each part
 
