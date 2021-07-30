@@ -11,14 +11,14 @@ program a console version of the game “Mastermind”.
 Pre-recorded video discussions are distributed via YouTube.  These videos are
 only available to the University of Michigan community, meaning you need to be
 logged into your @umich.edu Gmail account in the browswer you want
-to view them in. If you are logged into a personal Gmail, you may need to use
-the switch account feature so that your @umich.edu account is primary.  If all
+to view them in. If you are logged into a personal Gmail, you can  use
+the "switch account" feature so that your @umich.edu account is primary.  If all
 else fails, sign out of Gmail and sign back into mail.umich.edu first.  
 
 ## Links to Exercises
 
-+ [Part 1](./exercises/part1/)
-+ [Part 2](./exercises/part2/)
++ [Part 1](./exercises/part1/), [Recording](https://youtu.be/4j-eLN1s9SM)
++ [Part 2](./exercises/part2/), [Recording](https://youtu.be/0ivIj0hRZ7k)
 
 ## Links to each part
 
