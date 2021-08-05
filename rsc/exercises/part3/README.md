@@ -5,7 +5,7 @@
 + Welcome [2-2:05]
 + Questions about Part 3 [2:05-2:20]
 + Exercise Set 1
-  - Live coding [2:20-3:20] *or*
+  - Live coding [2:20-3:25] *or*
   - Breakout 1 [2:20-2:35]
   - Discussion [2:35-2:50]
   - Breakout 2 [2:50-3:10]
@@ -23,7 +23,7 @@ option to provide feedback on whether a guess was too high or too low.
 Starting with step 4, call the function to play the game once or twice after
 each step to check for syntax errors or bugs (unexpected behavior).
 
-```
+
 1. Download and open the template [here](./rsc_part3_gg_template.R) 
    and update the header.
 2. Create a list `messages` with slots `welcome`, `win` and `lose` each 
@@ -87,4 +87,4 @@ each step to check for syntax errors or bugs (unexpected behavior).
     `show_target = FALSE` and `msgs = messages` (from the global environment)
     and pass other parameters as is. 
 21. Test your function under various circumstances and consider upgrades. 
-```
+
