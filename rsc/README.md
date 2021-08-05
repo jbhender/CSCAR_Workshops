@@ -19,6 +19,7 @@ else fails, sign out of Gmail and sign back into mail.umich.edu first.
 
 + [Part 1](./exercises/part1/), [Recording](https://youtu.be/4j-eLN1s9SM)
 + [Part 2](./exercises/part2/), [Recording](https://youtu.be/0ivIj0hRZ7k)
++ [Part 3](./exercises/part3/)
 
 ## Links to each part
 
