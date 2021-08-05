@@ -88,3 +88,4 @@ each step to check for syntax errors or bugs (unexpected behavior).
     and pass other parameters as is. 
 21. Test your function under various circumstances and consider upgrades. 
 
+You can download an example solution [here](./rsc_part3_solution.R)
