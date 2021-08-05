@@ -10,7 +10,7 @@ program a console version of the game “Mastermind”.
 
 Pre-recorded video discussions are distributed via YouTube.  These videos are
 only available to the University of Michigan community, meaning you need to be
-logged into your @umich.edu Gmail account in the browswer you want
+logged into your @umich.edu Gmail account in the browser you want
 to view them in. If you are logged into a personal Gmail, you can  use
 the "switch account" feature so that your @umich.edu account is primary.  If all
 else fails, sign out of Gmail and sign back into mail.umich.edu first.  
