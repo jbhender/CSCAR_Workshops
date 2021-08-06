@@ -286,7 +286,7 @@ I did not record lectures for this part due to low interest in earlier recording
   - Example Script: [R_regex.R](./examples/part4/R_regex.R)
 
 + Factors
- - [Notes](https://jbhender.github.io/workshops/rsc/R_Short_Course_Part4.html#factors)
- - Example Script: [R_factors.R](./examples/part4/R_factors.R)
+  - [Notes](https://jbhender.github.io/workshops/rsc/R_Short_Course_Part4.html#factors)
+  - Example Script: [R_factors.R](./examples/part4/R_factors.R)
 
 ---
