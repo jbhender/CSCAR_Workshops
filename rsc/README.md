@@ -289,4 +289,4 @@ I did not record lectures for this part due to low interest in earlier recording
  - [Notes](https://jbhender.github.io/workshops/rsc/R_Short_Course_Part4.html#factors)
  - Example Script: [R_factors.R](./examples/part4/R_factors.R)
 
---
+---
