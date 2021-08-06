@@ -149,7 +149,7 @@ The video recordings are also collected in a playlist
 
 + Vectors
   - [Notes](https://jbhender.github.io/workshops/rsc/R_Short_Course_Part2.html#vectors)
-  - Example Script: [R_vectors.R]
+  - Example Script: [R_vectors.R](./examples/part2/R_vectors.R)
   - [Video Lecture](https://youtu.be/LHvPh_6Gds4)
   
 + Vector Indexing
@@ -228,12 +228,12 @@ The video recordings are also collected in a playlist
 
 + Conditional Execution
   - [Notes](https://jbhender.github.io/workshops/rsc/R_Short_Course_Part3.html#conditional)
-  - Example Script: [R_conditional.R](./R_conditional.R)
+  - Example Script: [R_conditional.R](./examples/part3/R_conditional.R)
   - [Video Lecture](https://youtu.be/UgqmODtxHgQ)
 
 + Iteration
   - [Notes](https://jbhender.github.io/workshops/rsc/R_Short_Course_Part3.html#iteration)
-  - Example Script: [R_iteration.R](./R_itreation.R)
+  - Example Script: [R_iteration.R](./examples/part3/R_itreation.R)
   - [Video Lecture](https://youtu.be/SIVBorwkmsc)
 
 ---
@@ -252,8 +252,7 @@ reading the following chapters from Hadley Wickham's
 [R for Data Science](https://r4ds.had.co.nz/):
 
   + [Strings](http://r4ds.had.co.nz/strings.html) (Chapter 14)
-    and [Factors](https://r4ds.had.co.nz/factors.html)
-    from Hadley Wickham's _R for Data Science_.
+    and [Factors](https://r4ds.had.co.nz/factors.html) (Chapter 15).
 
 I also recommend reading:
 
@@ -280,13 +279,14 @@ I did not record lectures for this part due to low interest in earlier recording
 
 + Strings
   - [Notes](https://jbhender.github.io/workshops/rsc/R_Short_Course_Part4.html#strings)
-  - Example Script: [R_strings.R](./R_strings.R)
+  - Example Script: [R_strings.R](./examples/part4/R_strings.R)
 
 + Regular Expressions
   - [Notes](https://jbhender.github.io/workshops/rsc/R_Short_Course_Part4.html#regex)
-  - Example Script: [R_regex.R](./R_regex.R)
+  - Example Script: [R_regex.R](./examples/part4/R_regex.R)
 
 + Factors
  - [Notes](https://jbhender.github.io/workshops/rsc/R_Short_Course_Part4.html#factors)
- - Example Script: [R_factors.R](./R_factorss.R)
- 
+ - Example Script: [R_factors.R](./examples/part4/R_factors.R)
+
+--
