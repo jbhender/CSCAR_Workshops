@@ -19,13 +19,14 @@ else fails, sign out of Gmail and sign back into mail.umich.edu first.
 
 + [Part 1](./exercises/part1/), [Recording](https://youtu.be/4j-eLN1s9SM)
 + [Part 2](./exercises/part2/), [Recording](https://youtu.be/0ivIj0hRZ7k)
-+ [Part 3](./exercises/part3/)
++ [Part 3](./exercises/part3/), [Recording](https://youtu.be/CpGLl_2GsHU)
 
 ## Links to each part
 
 + [Part 1](#part-1---getting-started)
 + [Part 2](#part-2---vectors-and-data-frames)
 + [Part 3](#part-3---programming-tools)
++ [Part 4](#part-4---strings-and-factors)
 
 ---
 
@@ -234,3 +235,58 @@ The video recordings are also collected in a playlist
   - [Notes](https://jbhender.github.io/workshops/rsc/R_Short_Course_Part3.html#iteration)
   - Example Script: [R_iteration.R](./R_itreation.R)
   - [Video Lecture](https://youtu.be/SIVBorwkmsc)
+
+---
+
+## Part 4 - Strings and Factors
+
+In part 4, we’ll discuss the following topics:
+  + working with strings in R using base and stringr functions,
+  + regular expressions, 
+  + factors. 
+
+### Recommended reading
+
+In addition to the notes linked below under *Workshop Content*, I'd recommend
+reading the following chapters from Hadley Wickham's
+[R for Data Science](https://r4ds.had.co.nz/):
+
+  + [Strings](http://r4ds.had.co.nz/strings.html) (Chapter 14)
+    and [Factors](https://r4ds.had.co.nz/factors.html)
+    from Hadley Wickham's _R for Data Science_.
+
+I also recommend reading:
+
+  + The `stringr` [readme](https://github.com/tidyverse/stringr).
+  
+  + An interactive [tutorial](https://regexone.com/lesson/introduction_abcs) 
+    on regular expressions.
+
+For more on R's S3 system, you might also read:
+
+   + [S3](https://rstudio-education.github.io/hopr/s3.html) (Chapter 10)
+      from Garrett Grolemund's _Hands-on Programming with R_.
+
+### Workshop content
+
+The notes for this week can be found at
+[R Short Course, Part 4](https://jbhender.github.io/workshops/rsc/R_Short_Course_Part4.html).
+The links below point to specific sections of these notes.
+
+You can use the links below to download the example scripts used in the notes. 
+These can also be found [here](https://github.com/jbhender/CSCAR_Workshops/tree/main/rsc/examples/part4).
+
+I did not record lectures for this part due to low interest in earlier recordings. 
+
++ Strings
+  - [Notes](https://jbhender.github.io/workshops/rsc/R_Short_Course_Part4.html#strings)
+  - Example Script: [R_strings.R](./R_strings.R)
+
++ Regular Expressions
+  - [Notes](https://jbhender.github.io/workshops/rsc/R_Short_Course_Part4.html#regex)
+  - Example Script: [R_regex.R](./R_regex.R)
+
++ Factors
+ - [Notes](https://jbhender.github.io/workshops/rsc/R_Short_Course_Part4.html#factors)
+ - Example Script: [R_factors.R](./R_factorss.R)
+ 

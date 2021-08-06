@@ -1,0 +1,496 @@
+---
+title: "R Short Course, Part 4 "
+author: "<a href='https://github.com/jbhender/CSCAR_Workshops/tree/main/rsc/'>R Short Course</a>"
+date: ""
+output: 
+  html_document:
+    theme: journal
+    toc: true
+    highlight: pygments
+    css: ../../styles.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(prompt = FALSE)
+```
+
+## ![](../../icons/Reading.png){width='25px'} Recommended Reading
+  + The `stringr` [readme](https://github.com/tidyverse/stringr).
+  
+  + [Strings](http://r4ds.had.co.nz/strings.html) (Chapter 14)
+    and [Factors](https://r4ds.had.co.nz/factors.html)
+    from Hadley Wickham's _R for Data Science_. 
+  
+  + An interactive [tutorial](https://regexone.com/lesson/introduction_abcs) 
+    on regular expressions.
+
+## ![](../../icons/Reading.png){width='25px'} Working with Strings in R {#strings}
+
+In R, you create strings of type `character` using either single or double 
+quotes. There is no difference (in R) between the two.
+
+```{r str1}
+string1 = "This is a string."
+string2 = 'This is a string.'
+all.equal(string1, string2)
+typeof(string1)
+```
+
+This is not the case in all languages. 
+
+You can mix single and double quotes when you want to include
+one or the other within your string.
+
+```{r str2}
+string_single = "These are sometimes called 'scare quotes'."
+print(string_single)
+
+string_double = 'Quoth the Raven, "Nevermore."'
+print(string_double)
+cat(string_double,'\n')
+```
+
+You can also include quotes within a string by escaping them:
+```{r str3}
+string_double = "Quoth the Raven, \"Nevermore.\""
+print(string_double)
+cat(string_double,'\n')
+```
+
+Observe the difference between `print()` and `cat()` in terms of how the 
+escaped characters are handled. Be aware also that, because backslash plays 
+this special role as an escape character, it itself needs to be escaped:
+
+```{r str4}
+backslash = "This is a backslash '\\', this is not '\ '."
+writeLines(backslash)
+```
+
+### Files as templates
+
+Similar to `cat()` is the function `writeLines()` used above. The latter is 
+more syntactic when writing to a file and has the advantage of adding a line
+between components of a vector. Below is an example.
+
+```{r str5}
+some_file = c('Line 1', 'Line 2')
+writeLines(some_file)
+
+## compare to cat
+cat(some_file)
+```
+
+You should also make note of `readLines()` for reading the text in a file.
+It is helpful to realize that `readLines()` and `writeLines()` are inverse
+to one another.  
+
+### String operations
+
+The table below collects some common string operations from base R and their
+parallels in the `stringr` package.  I say *parallels* and not *equivalents*
+because they do not always behave in the same way.  If you are new to string
+manipulation in R, I suggest you use `stringr` for these operations. 
+However, you should  be aware of the common base functions as you may encounter 
+them in code written by others.
+
+operation | base | stringr 
+---- | ---- | ----
+join | `paste` | `str_c`
+subset | `substr` | `str_sub`
+split | `strsplit` | `str_split`
+search | `grep`, `grepl` | `str_which`,`str_detect`
+
+#### concatenating strings
+
+The functions `paste` and `stringr::str_c` are both used to join strings 
+together.
+
+Observe the difference between the `sep` and `collapse` arguments in `paste`.
+```{r str7}
+length(LETTERS)
+paste(LETTERS, collapse = "")
+paste(1:26, LETTERS, sep = ': ')
+paste(1:26, LETTERS, sep = ': ', collapse = '\n ')
+```
+
+Below we see that `str_c` behaves similarly.
+```{r str8}
+library(stringr) # stringr is in the tidyverse
+all.equal(str_c(LETTERS, collapse = ""), paste(LETTERS, collapse = ""))
+all.equal(str_c(1:26, LETTERS, sep = ': '), paste(1:26, LETTERS, sep = ': '))
+all.equal(
+  str_c(1:26, LETTERS, sep = ': ', collapse = '\n '), 
+  paste(1:26, LETTERS, sep = ': ', collapse = '\n ') 
+)
+```
+
+However, these functions differ in the treatment of missing values (`NA`).
+
+```{r str9}
+paste(1:3, c(1, NA, 3), sep = ':', collapse = ', ')
+str_c(1:3, c(1, NA, 3), sep = ':', collapse = ', ')
+str_c(1:3, str_replace_na(c(1, NA, 3)), sep = ":", collapse = ', ')
+```
+
+#### length
+
+Recall that `length` returns the length of a vector. To get the length of a
+string use `nchar` or `str_length`.
+
+```{r str10}
+length(paste(LETTERS, collapse = "") )
+nchar(paste(LETTERS, collapse = "") )
+str_length(paste(LETTERS, collapse = "") )
+```
+
+#### substrings
+
+The following functions extract sub-strings at given positions.
+
+```{r str11}
+substr('Strings',  3, 7)
+str_sub('Strings', 1, 6)
+```
+
+The function `stringr::str_sub` supports negative indexing.
+```{r str12}
+sprintf('base: %s, stringr: %s', 
+        substr('Strings', -5, -1), 
+        str_sub('Strings', -5, -1)
+)
+```
+
+#### finding matches
+
+The example below uses the vector `fruit` from the `stringr` package.
+
+The base function `grep` returns the indices of all strings within a vector 
+that contain the requested pattern. The `grepl` function behaves in the same way 
+but returns a logical vector of the same length as the input `x`.
+
+```{r str13}
+head(fruit)
+grep('fruit', fruit)
+which(grepl('fruit', fruit) )
+head(grepl('fruit', fruit) )
+grepl('fruit', fruit)[grep('fruit', fruit)]
+```
+
+These functions are vectorized over the input but not the pattern.
+
+```{r str14}
+grep(c('fruit', 'berry'), fruit)
+sapply(c('fruit', 'berry'), grep, x = fruit)
+```
+
+The `match` function is vectorized over the input, but returns only the first
+match and requires exact matching.
+
+```{r str15}
+match('berry', fruit)
+match(c('apple', 'pear'), c(fruit, fruit))
+```
+
+The corresponding `stringr` functions are vectorized over both pattern and
+input, but the vectorization uses broadcasting so be careful. Pay attention to
+the order that the string and pattern are supplied in as it is the reverse of
+the base functions.
+
+```{r str16}
+ind_fruit = which(str_detect(fruit, 'fruit') )
+ind_berry = which(str_detect(fruit, 'berry') )
+
+ind_either = which(str_detect(fruit, c('fruit','berry') ) )
+setdiff(union(ind_fruit, ind_berry), ind_either )
+
+# below I demonstrate the broadcasting pattern
+ind_odd = seq(1, length(fruit), 2)
+ind_even = seq(2, length(fruit), 2)
+
+odd_fruit = ind_odd[ str_detect(fruit[ind_odd], 'fruit') ]
+even_berry = ind_even[ str_detect(fruit[ind_even], 'berry') ]
+setdiff(union(odd_fruit, even_berry), ind_either )
+```
+
+The vectorization in this case doesn't help us to avoid the `lapply` pattern we
+used with `grep`.
+
+```{r str17}
+sapply(c('fruit', 'berry'), function(x) which(str_detect(fruit, x) ) )
+```
+
+However, `str_locate` is vectorized using an "OR" operator.
+
+```{r str18}
+ind_fruit = str_locate(fruit, 'fruit')
+ind_berry = str_locate(fruit, 'berry')
+
+ind_either = str_locate(fruit, c('fruit','berry'))
+setdiff(union(ind_fruit, ind_berry), ind_either )
+```
+
+#### find and replace
+
+For find and replace operations, you can use one of `str_replace` or 
+`str_replace_all`. The former matches only the first instance of pattern.
+Similar base functions are `sub` and `gsub`. 
+
+```{r str19}
+# abc ... 
+letter_vec = paste(letters, collapse = '')
+
+## replace all instances
+str_replace_all(letter_vec, '[aeiou]', 'X')
+
+#replace the first instance
+str_replace(letter_vec, '[aeiou]', 'X')
+```
+
+You can also find and/or replace by the position in a string using `str_sub`.
+```{r str20}
+# to replace by location
+str_sub(letter_vec, start = 1:3, end = 2:4)
+str_sub(letter_vec, start = -3, end = -1) = 'XXX'
+```
+
+#### splitting strings
+
+The base function `strsplit` can be used to split a string into pieces based on 
+a pattern. The example below finds all two-word fruit names from `fruit`.
+
+```{r str21}
+fruit_list = strsplit(fruit,' ')
+two_ind = which(sapply(fruit_list, length)==2)
+fruit_two = lapply(fruit_list[two_ind], paste, collapse=' ')
+unlist(fruit_two)
+```
+
+The `str_split` function behaves similarly for this simple case. 
+```{r str22}
+all.equal(fruit_list, str_split(fruit, ' '))
+```
+
+When there are multiple patterns matching the split point, the functions
+`strsplit` and `str_split` behave differently.
+
+```{r str23}
+string = '1;2,3'
+strsplit(string, c(';', ','))
+str_split(string, c(';', ','))
+
+# Use a regular expression to split on either character. 
+str_split(string,';|,')
+```
+
+## ![](../../icons/Reading.png){width='25px'} Regular Expressions {#regex}
+
+*Regular expressions* ("regexp" or "regex") are a way to describe patterns in 
+strings, often in an abstract way. There is a common regexp vocabulary 
+though some details differ between implementations and standards. 
+The basic idea is illustrated in the examples below using the fruit data
+from the `stringr` library.
+
+```{r regex1}
+## find all two word fruits by searching for a space
+fruit[grep(" ", fruit)]
+
+## find all fruits with an 'a' anywhere in the word
+fruit[grep("a", fruit)]
+
+## find all fruits starting with 'a'
+fruit[grep("^a", fruit)]
+
+## find all fruits ending with 'a'
+fruit[grep("a$", fruit)]
+
+## find all fruits starting with a vowel
+fruit[grep("^[aeiou]", fruit)]
+
+## find all fruits with two consecutive vowels
+fruit[grep("[aeiou]{2}", fruit)]
+
+## find all fruits ending with two consecutive consonants other than r
+fruit[grep("[^aeiour]{2}$", fruit)]
+```
+
+In the examples above, we return all strings matching a simple pattern. 
+
+We can  specify that the pattern be found at the beginning `^a` or end `a$`
+using *anchors*. We can provide multiple options for the match within brackets
+`[]`. We can negate options within brackets using `^` in a different context.
+The curly braces ask for a specific number (or range `{min, max}`) of matches. 
+
+In the example below we use `.` to match any (single) character. 
+We can ask for multiple matches by appending
+`*` if we want 0 or more matches and `+` if we want at least 1 match.
+
+```{r regex2}
+## find all fruits with two consecutive vowels twice, separated by a single
+## consonant
+fruit[grep("[aeiou]{2}.[aeiou]{2}", fruit)]
+
+## find all fruits with two consecutive vowels twice, separated by one or
+## more consonants
+fruit[grep("[aeiou]{2}.+[aeiou]{2}", fruit)]
+
+## find all fruits with exactly three consecutive consonants in the middle of
+## two vowels
+fruit[grep("[aeiou][^aeiou ]{3}[aeiou]", fruit)]
+#str_view(fruit, "[aeiou][^aeiou ]{3}[aeiou]")
+```
+
+To match an actual period (or other meta-character) we need to escape with a
+backslash. Thus, we use the regular expression `\\.`
+```{r regex3}
+c(fruit, "umich.edu")[grep('\\.', c(fruit, "umich.edu"))]
+```
+
+The double backslash is needed because the regular expression itself is passed
+as a string and strings also use backslash as an escape character.  This is also
+important to remember when building file paths as strings on a Windows computer.
+In other languages, you generally only need a single backslash in your 
+regular expression. 
+
+Matched values can be grouped using parentheses `()` and referred back to in the
+order they appear using a back reference `\\1`. 
+
+```{r regex4}
+## find all fruits with a repeated letter
+fruit[grep("(.)\\1", fruit)]
+
+## find all fruits with a repeated letter but exclude double r
+fruit[grep("([^r])\\1", fruit)]
+
+## find all fruits that end with a repeated letter
+fruit[grep("(.)\\1$", fruit)]
+```
+
+## ![](../../icons/Laptop.png){width='25px'} (Exercise) Regex crosswords
+
+A fun way to learn or brush up on your knowledge of regular expressions is
+to solve a [Regex Crossword](https://regexcrossword.com/). 
+
+## ![](../../icons/Reading.png){width='25px'} Factors {#factors}
+
+Factors are a form of S3 vector in R useful for working with categorical 
+variables that take on a fixed set of possible values.  We use factors in 
+regression modelling to indicate terms that should be encoded as a set of 
+(usually) orthogonal 0/1 basis functions.  Factor are also useful when you
+want to display string variables on a plotting axis in a non alphabetical 
+order.
+
+Factor vectors are built on top of an atomic integer vectors with a special
+attribute `levels` providing a unique label for each of the possible values.
+Moreover, because they have class `factor` R's S3 method dispatch means they
+may be treated similarly or differently than integer vectors or 
+character vectors depending on context. 
+
+### Creating Factors
+
+Factors are usually created using the construct `factor()`.  In the example
+below, we crate a factor `transmission` from the `am` factor in the built in
+`mtcars` data. 
+
+```{r factor1}
+mtcars[['transmission']] = 
+  with(mtcars, factor(am, levels = c(0, 1), labels = c('automatic', 'manual')))
+```
+
+When using `factor()` the `levels` argument the current set of unique values and
+the `labels` argument to assign names to these. 
+
+```{r factor2}
+class(mtcars[['transmission']])
+levels(mtcars[['transmission']])
+# note the change
+as.numeric(mtcars[['transmission']])
+as.character(mtcars[['transmission']])
+names(attributes(mtcars[['transmission']]))
+attr(mtcars[['transmission']], 'levels')
+```
+
+Note that the levels are always numbered from 1 after creating a factor and
+that the "labels" are now called "levels" and accessed with the accessor 
+function `levels()`. 
+
+### Working with factors
+
+Using the factor we get nice labels in, e.g., a table or a ggplot graphic.  
+
+```{r factors3}
+with(mtcars, table(transmission, am))
+```
+
+In fact, for `ggplot` we must use factor variables for discrete aesthetics.
+```{r factor4}
+library(tidyverse)
+mtcars %>% 
+  ggplot(aes(x = wt, y = mpg, color = transmission, shape = factor(am))) +
+  geom_point() +
+  theme_bw() + 
+  scale_color_manual(values = c('darkred', 'darkblue')) +
+  xlab('weight (1,000 lbs)')
+```
+
+In the example below, the order of the boxplots is determined by the order
+of the factor. 
+```{r factor5}
+mtcars %>% 
+  ggplot(aes(x = mpg, y = transmission)) +
+  geom_boxplot() + 
+  theme_bw() 
+```
+
+We can change the order of a factor in two ways. To choose a new reference 
+level and increment other levels by 1, use `relevel()`. Here we'll use
+`dplyr::mutate()` to do this on the fly. 
+
+```{r factor6}
+mtcars %>% 
+  mutate(transmission = relevel(transmission, ref = 'manual')) %>%
+  ggplot(aes(x = mpg, y = transmission)) +
+  geom_boxplot() + 
+  theme_bw() 
+```
+
+When you have more than a few levels and want a totally new order it's best to
+create a new factor.
+
+```{r factor7}
+new_ord = c('manual', 'automatic')
+stopifnot( all(levels(mtcars[['transmission']]) %in% new_ord))
+mtcars %>% 
+  mutate(transmission = factor(transmission, new_ord, new_ord)) %>%
+  ggplot(aes(x = mpg, y = transmission)) +
+   geom_boxplot() + 
+   theme_bw() 
+```
+
+This can be when you want to order one variable in terms of another.
+
+```{r factor8}
+mtcars %>%
+  arrange(mpg) %>%
+  mutate(car = factor(rownames(.), rownames(.))) %>%
+  ggplot(aes(x = car, y = mpg, fill = transmission)) + 
+   geom_col() + 
+   coord_flip() + 
+   scale_fill_manual(values = c('darkred', 'darkblue')) +
+   theme_bw() 
+```
+
+Finally, note the difference in how factors are treated when forming design
+matrices for regression.
+
+```{r factor9}
+mtcars[['cyl_f']] = with(mtcars, factor(cyl))
+x1 = model.matrix(mpg ~ cyl, data = mtcars)
+x2 = model.matrix(mpg ~ cyl_f, data = mtcars)
+
+cbind(head(x1), matrix(NA, nrow = 6), head(x2))
+
+lm(mpg ~ cyl, data = mtcars) |> summary()
+lm(mpg ~ cyl_f, data = mtcars) |> summary()
+```
+
