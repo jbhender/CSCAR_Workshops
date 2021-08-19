@@ -32,7 +32,7 @@ msgs = list(
     'Please enter a color (%s) or its abbreviation (%s).\n'
   ),
   win_msg = '@<##>@ - Congrats! You guessed the secret: %s.\n',
-  feedback_msg = '@<##>@ - correct positions: %i, correct colors: % i',
+  feedback_msg = '@<##>@ - correct positions: %i, correct colors: % i\n',
   lose_msg = '@<##>@ - Mastermind wins! The secret code was:\n %s.\n\n'
 )
 # generate the secret code: ---------------------------------------------------
@@ -211,7 +211,7 @@ feedback = function(result, secret, messages = msgs) {
   } else {
     feedback_msg = 
       with(result,
-           sprintf(messages[['feedback_msg']], n_exact, n_colors)
+           sprintf(messages[['feedback_msg']], n_exact, n_color)
       )
     cat(feedback_msg)
   }
@@ -222,7 +222,7 @@ feedback = function(result, secret, messages = msgs) {
 # Tests
 stopifnot(
   feedback( 
-    result = list(n_exact = 4, n_colors = 0),
+    result = list(n_exact = 4, n_color = 0),
     secret = c('Blue', 'White', 'Yellow', 'Gold'),
     messages = msgs
   )
@@ -230,7 +230,7 @@ stopifnot(
 
 stopifnot(
   feedback( 
-    result = list(n_exact = 2, n_colors = 1),
+    result = list(n_exact = 2, n_color = 1),
     secret = c('Blue', 'White', 'Yellow', 'Gold'),
     messages = msgs
   ) == FALSE
@@ -239,7 +239,7 @@ stopifnot(
 # implement game: -------------------------------------------------------------
 play_mastermind = function(
   n, 
-  dict,
+  dict = col_dict,
   max_turns = 10,
   repeats = FALSE,
   messages = msgs
@@ -253,7 +253,8 @@ play_mastermind = function(
   #  repeats - whether to allow colors to be repeated in the secret
   #  messages - a list of messages to pass to function 
   # Output:
-  #  
+  #   Game is played primarily for it's side effect at the console, but
+  #   it invisibly returns 1 when the player wins and 0 if not. 
   
   # Initialize
   turn = 1
@@ -275,6 +276,7 @@ play_mastermind = function(
     
     result = check_guess(g, secret, repeats)
     win = feedback(result, secret, messages)
+    turn = turn + 1
   }
   
   # Return with win
@@ -283,22 +285,26 @@ play_mastermind = function(
   } 
   
   if ( turn > max_turns ) {
-    lose_msg = sprintf(messages[['lose_msg']], paste(secret, collapse=', '))
+    lose_msg = sprintf(messages[['lose_msg']], paste(secret, collapse = ', '))
     cat(lose_msg)
   }
   
   # Return with loss
-  return( invisible(0) )
+  return(invisible(0))
 }
 
 ## Tests
 
 # Test a winning solution
 set.seed(1)
-play_mastermind(2, std_dict, 2)
-#Blue, White
+play_mastermind(2, col_dict, max_turns = 2)
+#Red, Yellow
 
 # Test a losing solution
 set.seed(2)
-play_mastermind(2, std_dict, 2)
+play_mastermind(2, col_dict, max_turns = 2)
+#Red, Yellow
+#Green, Blue
+
+#play_mastermind(4, col_dict, max_turns = 10)
 # 79: -------------------------------------------------------------------------
