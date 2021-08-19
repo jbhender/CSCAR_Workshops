@@ -176,6 +176,11 @@ stopifnot(
       + requests new input if invalid
       + provides feedback on valid input.
       
-
+21. If the while loop exits because the player won the game,
+    invisibily return 1 using `invisible()`. Otherwise,
+    print a message that that game ended with a loss and
+    invisibly return 0.
+    
+    
 [Solution](./masteRmind_task6.R)
 
