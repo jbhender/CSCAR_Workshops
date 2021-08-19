@@ -152,4 +152,27 @@ stopifnot(
 
 ## Task 6 - Put it all together
 
-I'll finish this task while you're working today. 
+18. We're now ready to implement the control flow of the game.
+    We'll do so in a function called `play_mastermind()`. This
+    function will take arguments:
+      - n, the length of the secret code
+      - 
+      -
+
+    Create an empty function with these arguments.
+
+19. At the start of your function, generate a secret code and
+    intialize variables `turn = 1` and `win = FALSE` to track
+    which turn the user is on and whether they've won yet.
+
+20. Write a `while` loop that repeats the following sequence
+    of events until the player wins the game or exceeds the
+    maximum number of turns:
+      + requests input
+      + cleans and validates input
+      + requests new input if invalid
+      + provides feedback on valid input.
+      
+
+[Solution](./masteRmind_task6.R)
+

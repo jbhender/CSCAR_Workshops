@@ -19,7 +19,7 @@ col_dict = c(
 # tests 
 stopifnot(length(col_dict) == 8)
 stopifnot(typeof(col_dict) == "character")
-stopifnot(length(unique(scol_dict)) == length(col_dict))
+stopifnot(length(unique(col_dict)) == length(col_dict))
 stopifnot(length(unique(names(col_dict))) == length(names(col_dict)))
 
 # messages list: --------------------------------------------------------------
@@ -50,7 +50,13 @@ stopifnot(all(gen_code(4, col_dict) %in% col_dict))
 
 # request user input: ---------------------------------------------------------
 request_input = function(num_guess = 1, msg_input = msgs[['msg_input']]) {
-  
+  # Prompts and receives user input
+  # Inputs:
+  #   num_guess- the guess (an integer) the users is currently inputting
+  #   msg_input - a template for the prompt
+  # Output: 
+  #   A side-effect prompting for input and the input as a length one
+  #   character vector. 
   # Prompt user
   request_str = sprintf(msg_input, num_guess)
   cat(request_str)
@@ -62,15 +68,14 @@ request_input = function(num_guess = 1, msg_input = msgs[['msg_input']]) {
   guess
 }
 
-if ( interactive() ) {
-  x = request_input(2) 
-  Blue, Orange, Green, Red
-  stopifnot(x == "Blue, Orange, Green, Red")
-}
+x = request_input(2) 
+#Blue, Orange, Green, Red
+stopifnot(x == "#Blue, Orange, Green, Red")
+
 
 # split input into comma-separated pieces: ------------------------------------
 split_guess = function(guess, sep = ','){
-  # split user input at each instace of `sep`
+  # split user input at each instance of `sep`
   # Inputs: 
   #   guess - the user input
   #   sep - the value to separate on, defaults to ","
