@@ -158,6 +158,35 @@ validate_guess(
   messages = msgs
 )
 
+check_guess = function(g, secret, repeats = FALSE) {
+  # check the accuracy of guess and record correct answers and correct colors
+  # Inputs:
+  #   g - the cleaned and validate guess
+  #   secret - the secret code
+  #   repeats - whether repeats are allowed in secret
+  # Output:
+  #   a list with entries n_exact and n_color giving the feedback
+  
+  if ( repeats == FALSE ) {
+    n_exact = sum(g == secret)    
+    n_color = length(intersect(g, secret)) - n_exact
+  } else {
+    n_exact = sum(g == secret)
+    g_tab = table(g) 
+    s_tab = table(secret)
+    
+    n_color = 
+      ifelse(
+        names(g_tab) %in% names(s_tab),
+        pmin(g_tab, s_tab),
+        0
+      ) |> sum() - n_exact
+    
+  }
+
+  list(n_exact = n_exact, n_color = n_color)
+}
+
 # standard feedback: ----------------------------------------------------------
 feedback = function(result, secret, messages = msgs) {
   # Check if user has won the game and provide feedback
