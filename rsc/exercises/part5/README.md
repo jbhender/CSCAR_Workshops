@@ -60,7 +60,7 @@ How would you break the game into steps?
 
 ### Task 2 - Create the secret code
 
-5. Write a function `gen_code(n, dict, sep)` that generates a secret code
+5. Write a function `gen_code(n, dict)` that generates a secret code
    of length `n` from a dictionary of colors `dict` using the
    function `sample()`. Be sure to document your function's purpose,
    inputs, and outputs.

@@ -19,12 +19,12 @@ col_dict = c(
 # alternately set names after creation: ---------------------------------------
 col_dict = 
   c('Red', 'Green', 'Blue', 'Yellow', 'Gold', 'Orange', 'Black', 'White')
-
 names(col_dict) = c('R', 'Gr', 'Bu', 'Y', 'Go', 'O', 'Ba', 'W')
 
 # tests 
 stopifnot(length(col_dict) == 8)
 stopifnot(typeof(col_dict) == "character")
-stopifnot(length(unique(scol_dict)) == length(col_dict))
+stopifnot(length(unique(col_dict)) == length(col_dict))
 stopifnot(length(unique(names(col_dict))) == length(names(col_dict)))
 
+# 79: -------------------------------------------------------------------------
