@@ -156,8 +156,11 @@ stopifnot(
     We'll do so in a function called `play_mastermind()`. This
     function will take arguments:
       - n, the length of the secret code
-      - 
-      -
+      - dict, the dictionary of colors to use
+      - max_turns, the number of guesses to allow the player
+      - repeats, whether to allow colors to be repeated in the secret
+      - messages, a list of messages to pass to function 
+
 
     Create an empty function with these arguments.
 
