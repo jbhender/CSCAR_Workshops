@@ -46,14 +46,15 @@ How would you break the game into steps?
    today's date.
 3. First, we will create a "dictionary" of 8 color
    abbreviations to use for the game. In your script,
-   create a named chracter vector `col_dict` with these 8
+   create a named character vector `col_dict` with these 8
    color words as its values:
    Red, Green, Blue, Yellow, Gold, Orange, Black, and White.
    Set the `names()` attribute of `col_dict` to these abbreviations:
    R, Gr, Bu, Y, Go, O, Ba, W.
-4. Use `stopifnot()` to add tests that your dictionary has
+4. Use `stopifnot()` to add tests to your script to ensure
+   that your dictionary has
    length 8, is of type "character", and
-   that all colors an abbreviatons are unique.
+   that all colors and abbreviatons are unique.
 
 [Solution](./masteRmind_task1.R)
 
@@ -142,7 +143,11 @@ stopifnot(
     `intersect()` function to determine `n_color`.  The repeat case
     is more challenging and can be skipped for now.
 
-
+17. Write a function `feedback()` that provides the user with
+    feedback about the number of correct positions ('red pips')
+    and the number of correct colors ('white pips').
+    
+    
 [Solution](./masteRmind_task5.R)
 
 ## Task 6 - Put it all together
