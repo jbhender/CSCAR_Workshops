@@ -19,22 +19,19 @@ col_dict = c(
 # tests 
 stopifnot(length(col_dict) == 8)
 stopifnot(typeof(col_dict) == "character")
-stopifnot(length(unique(scol_dict)) == length(col_dict))
+stopifnot(length(unique(col_dict)) == length(col_dict))
 stopifnot(length(unique(names(col_dict))) == length(names(col_dict)))
 
 # messages list: --------------------------------------------------------------
 msgs = list(
- msg_input = '@<##>@ - Plase enter guess number %i:\n',
- too_few = '@<##>@ - The secret is %i colors, you only entered %i.\n',
- too_many = '@<##>@ - The secret is %i colors, but you entered %i.\n',
- bad_guess = paste(
-   '@<##>@ - Guesses %s are not valid colors.',
-   'Please enter a color (%s) or its abbreviation (%s).'
- ),  
- win_msg =  '@<##>@ - Congratulations! You guessed the secret code: %s.\n',
- feedback_msg = '@<##>@: exact = %i, colors = %i.\n'
+  msg_input = '@<##>@ - Plase enter guess number %i:\n',
+  too_few = '@<##>@ - The secret is %i colors, you only entered %i.\n',
+  too_many = '@<##>@ - The secret is %i colors, but you entered %i.\n',
+  bad_guess = paste(
+    '@<##>@ - Guesses %s are not valid colors.',
+    'Please enter a color (%s) or its abbreviation (%s).\n'
+  )  
 )
-
 # generate the secret code: ---------------------------------------------------
 # n - the number of words in the secret code
 # dict - a dictionary from which to choose the code. 
@@ -70,11 +67,10 @@ request_input = function(num_guess = 1, msg_input = msgs[['msg_input']]) {
   guess
 }
 
-if ( interactive() ) {
-  x = request_input(2) 
-  Blue, Orange, Green, Red
-  stopifnot(x == "Blue, Orange, Green, Red")
-}
+x = request_input(2) 
+#Blue, Orange, Green, Red
+stopifnot(x == "#Blue, Orange, Green, Red")
+
 
 # split input into comma-separated pieces: ------------------------------------
 split_guess = function(guess, sep = ','){
@@ -98,25 +94,24 @@ clean_guess = function(g, dict) {
   # Inputs:
   #   g - a user guess split at commas as returned by split_guess()
   #   dict - a named dictionary of colors, with names being abbreviations
-  # Output: 
-  #   A character vector the same length as `g` with all values not in
+  # Output: a character vector the same length as `g` with all values not in
   #   `dict` set to `NA`.
-  g = stringr::str_to_lower(g) 
+  g = stringr::str_to_title(g) 
   g = ifelse(
-    g %in% stringr::str_to_lower(dict), 
+    g %in% dict,
     g,
     ifelse(
-      g %in% stringr::str_to_lower(names(dict)),
-      dict[stringr::str_to_title(g)],
+      g %in% names(dict),
+      dict[g],
       NA
     )
   )
-  stringr::str_to_title(g)
+  g
 }
 
 stopifnot(
   c('R', 'gr', 'blue', 'Brown') |> 
-      clean_guess(dict = col_dict) %in% c('Red', 'Green', 'Blue', NA)
+    clean_guess(dict = col_dict) %in% c('Red', 'Green', 'Blue', NA)
 )
 
 # validate user input: --------------------------------------------------------
@@ -131,12 +126,12 @@ validate_guess = function(g, code_length, dict, messages = msgs) {
   #   When FALSE, a message for the first failed test is passed. 
   
   # Check that guess is the right length
-  if ( length(guess) < code_length ) {
+  if ( length(g) < code_length ) {
     sprintf(messages[['too_few']], code_length, length(g)) |> cat()
     return(FALSE)
   }
   
-  if ( length(guess) > code_length ) {
+  if ( length(g) > code_length ) {
     sprintf(messages[['too_many']], code_length, length(g)) |> cat()
     return(FALSE)
   }
@@ -150,39 +145,18 @@ validate_guess = function(g, code_length, dict, messages = msgs) {
       paste(names(dict), collapse = ', ')
     ) |> 
       cat()
+    return(FALSE)
   }
   
   TRUE
 }
 
-# check cleaned user code to provide feedback on correctness: -----------------
-check_guess = function(g, secret, repeats = FALSE) {
-  # Compute number exactly correct and the number of correct colors
-  # Inputs:
-  #   g - the cleaned user guess
-  #   secret - the secret code the users is after
-  #   repeats - whether repeats are allowed in secrete
-  # Output:
-  #   A list with entries `n_exact` and `n_color` giving the number of
-  #   exactly correct guesses and the number of correct colors. 
-  
-  n_exact = sum(g == secret)
-  
-  if ( repeats == FALSE ) {
-    n_color = length( intersect(g, secret) )  
-  } else {
-    g_tab = table(g)
-    s_tab = table(secret)
-    n_color = 
-      ifelse(
-        names(g_tab) %in% names(s_tab),
-        pmin(g_tab, s_tab),
-        0
-      ) |> sum()
-  }
-  
-  list(n_exact = n_exact, n_color = n_color)
-}
+validate_guess(
+  clean_guess(c('R', 'gr', 'blue', 'Brown'), dict = col_dict),
+  code_length = 4, 
+  dict = col_dict,
+  messages = msgs
+)
 
 # standard feedback: ----------------------------------------------------------
 feedback = function(result, secret, messages = msgs) {
