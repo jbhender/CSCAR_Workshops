@@ -23,12 +23,6 @@ stopifnot(length(unique(scol_dict)) == length(col_dict))
 stopifnot(length(unique(names(col_dict))) == length(names(col_dict)))
 
 # generate the secret code: ---------------------------------------------------
-# n - the number of words in the secret code
-# dict - a dictionary from which to choose the code. 
-# repeats = FALSE, - should repeats be allowed?
-# sep - how to separate words in the code
-# based on the R function "sample"
-
 gen_code = function(n, dict, repeats = FALSE) {
   # generate a sequence of colors for the secret code in mastermind
   # Inputs:
