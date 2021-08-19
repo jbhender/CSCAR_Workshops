@@ -21,7 +21,7 @@ following programming concepts:
   - indexing
   - functions
   - Boolean relational operators
-  - iteraiton using `for` and/or `while` loops
+  - iteration using `for` and/or `while` loops
   - string manipulations.
 
 The project is divided in a series of tasks below.
@@ -29,7 +29,7 @@ Each task builds on prior tasks to build up the game.
 
 ### Flow
 
-![](.mastermind_flow.png)
+![](./mastermind_flow.png)
 
 ### Task 0
 
